@@ -13,7 +13,6 @@ set(WAVE_SOURCE_LIST
     "assets/shader/shader_manager.h"
     "assets/shader/shader_manager.cpp"
     "assets/texture/texture.h"
-    "assets/texture/texture.cpp"
     "assets/texture/texture_manager.h"
     "assets/texture/texture_manager.cpp"    
     "buffer/buffer.h"
@@ -23,8 +22,8 @@ set(WAVE_SOURCE_LIST
     "context/imgui_context.h"
     "context/imgui_context.cpp"
     "include/wave.h"
-    "input/input.h"
-    "input/input.cpp"
+    "events/input.h"
+    "events/input.cpp"
     ${WAVE_PCH_H}
     ${WAVE_PCH_CPP}
     "util/log.h"
