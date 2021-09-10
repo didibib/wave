@@ -7,6 +7,7 @@ endif()
 
 # Define paths
 set(VENDOR_DIR "${CMAKE_SOURCE_DIR}/vendor")
+set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 
 # Include cmake modules
 include(cmake/update_submodules.cmake)
@@ -28,7 +29,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 
-# Update all submodules
+# Update all git submodules
 update_submodules()
 
 # Start building

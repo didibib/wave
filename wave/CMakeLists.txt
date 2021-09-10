@@ -1,107 +1,62 @@
-# Collect core files
-set(WAVE_PCH_H        
-    "include/wavepch.h"
+# Collect files
+set(WAVE_PCH_H
+    "pch/wavepch.h"
 )
-set(WAVE_PCH_CPP      
-    "src/wavepch.cpp"
+
+set(WAVE_PCH_CPP
+    "pch/wavepch.cpp"
 )
-set(WAVE_UTIL  
-    "include/util.h"
-)
-set(WAVE_H 
+
+set(WAVE_SOURCE_LIST
+    "assets/shader/shader.h"
+    "assets/shader/shader.cpp"
+    "assets/shader/shader_manager.h"
+    "assets/shader/shader_manager.cpp"
+    "assets/texture/texture.h"
+    "assets/texture/texture.cpp"
+    "assets/texture/texture_manager.h"
+    "assets/texture/texture_manager.cpp"    
+    "buffer/buffer.h"
+    "buffer/buffer.cpp"    
+    "camera/camera.h"
+    "camera/camera.cpp"
+    "context/imgui_context.h"
+    "context/imgui_context.cpp"
     "include/wave.h"
-)
-set(WAVE_WINDOW
-    "include/window.h"
-    "include/window_glfw.h"
-    "src/window_glfw.cpp"
-)
-set(WAVE_INPUT
-    "include/input.h"
-    "src/input.cpp"
-)
-set(WAVE_LOG
-    "include/log.h"
-    "src/log.cpp"
-)
-set(WAVE_IMGUI_CONTEXT
-    "include/imgui_context.h"
-    "src/imgui_context.cpp"
-)
-set(WAVE_SHADER
-    "include/shader.h"
-    "src/shader.cpp"
-)
-set(WAVE_BUFFERS
-    "include/opengl_buffers.h"
-    "src/opengl_buffers.cpp"
-)
-set(WAVE_TEXTURE
-    "include/opengl_texture.h"
-    "src/opengl_texture.cpp"
-)
-set(WAVE_CAMERA
-    "include/camera.h"
-    "src/camera.cpp"
-)
-# Set filters
-source_group("include" FILES
-    ${WAVE_H}
-)
-source_group("pch" FILES 
-    ${WAVE_PCH_H} 
-    ${WAVE_PCH_CPP} 
-)
-source_group("util" FILES
-    ${WAVE_SUBDEC}
-    ${WAVE_LOG}
-)
-source_group("window" FILES
-    ${WAVE_WINDOW}
-)
-source_group("input" FILES
-    ${WAVE_INPUT}
-)
-source_group("context" FILES
-    ${WAVE_IMGUI_CONTEXT}
-)
-source_group("shader" FILES
-    ${WAVE_SHADER}
-)
-source_group("buffers" FILES
-    ${WAVE_BUFFERS}
-)
-source_group("texture" FILES
-    ${WAVE_TEXTURE}
-)
-source_group("camera" FILES 
-    ${WAVE_CAMERA}
+    "input/input.h"
+    "input/input.cpp"
+    ${WAVE_PCH_H}
+    ${WAVE_PCH_CPP}
+    "util/log.h"
+    "util/log.cpp"
+    "util/util.h"
+    "window/window.h"
+    "window/window_glfw.h"
+    "window/window_glfw.cpp"
 )
 
 # Build static library
 add_library(wave STATIC
-    ${WAVE_PCH_H} ${WAVE_PCH_CPP}   
-    ${WAVE_SUBDEC}
-    ${WAVE_H}
-    ${WAVE_WINDOW}
-    ${WAVE_INPUT} 
-    ${WAVE_LOG}
-    ${WAVE_IMGUI_CONTEXT}
-    ${WAVE_SHADER}
-    ${WAVE_BUFFERS}
-    ${WAVE_TEXTURE}
-    ${WAVE_CAMERA}
+    ${WAVE_SOURCE_LIST}
 )
+
+# Group sources according to the folder structure
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${WAVE_SOURCE_LIST})
+
+# Add macro specifying assets directory
+# ${ASSETS_DRI} is set in the root 
+target_compile_definitions(wave PRIVATE ASSETS_DIR=${ASSETS_DIR})
 
 # Set output directories    
 set_target_output_directories(wave)
 
 # Set precompiled headers
-set_target_precompiled_header(wave "wavepch.h" "wavepch.cpp" WAVE_PCH_CPP)
+set_target_precompiled_header(wave WAVE_PCH_H WAVE_PCH_CPP)
 
 # Specify include directories
+# Make them public so that executables can inherit them
 target_include_directories(wave 
-    PUBLIC include
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
     PUBLIC ${FREE_IMAGE_INCLUDE}
 )
 
@@ -109,6 +64,7 @@ target_include_directories(wave
 find_package(OpenGL)
 
 # Link libraries to wave
+# Make them public so that executables can inherit them
 target_link_libraries(wave PUBLIC
     ${OPENGL_gl_LIBRARY}
     glad
