@@ -9,5 +9,5 @@ uniform sampler2D texture1;
 
 void main()
 {
-    frag_color = vert_color;  
+    frag_color = texture(texture1, vert_uv);  
 }

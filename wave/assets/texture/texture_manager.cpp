@@ -12,7 +12,7 @@ namespace Wave
 		TRACE("Texture manager constructed");
 	}
 
-	std::optional<GLuint> TextureManager::load(std::string filename)
+	std::optional<GLuint> TextureManager::Load(std::string filename)
 	{		
 		// wave_asset_dir is defined in wavepch.h
 		std::string filepath = mTextureDir + filename;
@@ -73,18 +73,28 @@ namespace Wave
 
 		FreeImage_Unload(dib);
 
-		add_texture(id, width, height);
+		AddTexture(id, width, height);
 
 		return id;
 	}
 
-	void TextureManager::add_texture(GLuint id, uint width, uint height)
+	void TextureManager::Bind(GLuint id)
+	{
+		glBindTexture(GL_TEXTURE_2D, id);
+	}
+
+	void TextureManager::Unbind()
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	void TextureManager::AddTexture(GLuint id, uint width, uint height)
 	{
 		auto pair = std::pair<GLuint, Texture>(id, Texture(id, width, height));
 		mTextureMap.insert(pair);
 	}
 
-	void TextureManager::delete_texture(GLuint id)
+	void TextureManager::DeleteTexture(GLuint id)
 	{
 		auto it = mTextureMap.find(id);
 		if (it != mTextureMap.end())

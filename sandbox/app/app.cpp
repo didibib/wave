@@ -6,8 +6,8 @@ namespace sandbox
 	App::App(int width, int height, const char* weather) : Wave::WindowGlfw(width, height, weather)
 	{	
 		auto& tm = Wave::TextureManager::GetInstance();
-		tm.load("brick_wall.jpg");
-		tm.load("ok.jpg");
+		temp1 = *tm.Load("brick_wall.jpg");
+		temp2 = *tm.Load("ok.jpg");
 
 		shader.Load("basic");
 		shader.Begin();
@@ -44,20 +44,11 @@ namespace sandbox
 
 	void App::Render(float delta_time)
 	{
-		// create transformations
-		glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
-		transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-
+		// glActiveTexture(GL_TEXTURE0);
+		auto& tm = Wave::TextureManager::GetInstance();
+		tm.Bind(temp1);
 		shader.Begin();
 		vb.Draw();
 		shader.End();
-
-		// glActiveTexture(GL_TEXTURE0);
-		/*texture.bind();
-		shader.begin();
-		shader.set_mat4("transform", transform);
-		vb.draw();
-		shader.end();*/
 	}
 }

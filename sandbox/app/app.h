@@ -15,5 +15,7 @@ namespace sandbox
 	private:
 		Wave::Shader shader;
 		Wave::VertexBuffer vb;
+
+		GLuint temp1, temp2;
 	};
 }

@@ -14,15 +14,17 @@ namespace Wave
             return instance;
         }
     public:
-        std::optional<GLuint> load(std::string filename);
+        std::optional<GLuint> Load(std::string filename);
+        void Bind(GLuint id);
+        void Unbind();
     private:
         TextureManager();
     private:
         std::string mTextureDir;    
         std::unordered_map<GLuint, Texture> mTextureMap;
     private:
-        void add_texture(GLuint id, uint width, uint height);
-        void delete_texture(GLuint id);
+        void AddTexture(GLuint id, uint width, uint height);
+        void DeleteTexture(GLuint id);
     public:
         // C++ 11, We can use the better technique of deleting the methods we don't want.
         TextureManager(TextureManager const&) = delete;
