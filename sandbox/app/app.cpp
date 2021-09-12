@@ -1,53 +1,80 @@
 #include "pch/sandboxpch.h"
 #include "app.h"
 
-namespace sandbox
+namespace Sandbox
 {
 	App::App(int width, int height, const char* weather) : Wave::WindowGlfw(width, height, weather)
-	{	
+	{
 		auto& tm = Wave::TextureManager::GetInstance();
-		temp1 = *tm.Load("brick_wall.jpg");
-		temp2 = *tm.Load("ok.jpg");
+		texId1 = *tm.Load("brick_wall.jpg");
+		texId2 = *tm.Load("awesomeface.png");
 
 		shader.Load("basic");
 		shader.Begin();
-		shader.SetInt("texture1", 0);
+		shader.SetInt("texture0", 0);
+		shader.SetInt("texture1", 1);
 		shader.End();
 
-		std::vector<Wave::Vertex> vert = {};
-		vert.resize(4);
-		vert[0].position =	glm::vec3(0.5f, 0.5f, 0.0f);		// top right
-		vert[0].color =		glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-		vert[0].uv =		glm::vec2(1.0f, 1.0f);
-
-		vert[1].position =	glm::vec3(0.5f, -0.5f, 0.0f);		// bottom right
-		vert[1].color =		glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-		vert[1].uv =		glm::vec2(1.0f, 0.0f);
-
-		vert[2].position =	glm::vec3(-0.5f, -0.5f, 0.0f);		// bottom left
-		vert[2].color =		glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-		vert[2].uv =		glm::vec2(0.0f, 0.0f);
-
-		vert[3].position =	glm::vec3(-0.5f, 0.5f, 0.0f);		// top left 
-		vert[3].color =		glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
-		vert[3].uv =		glm::vec2(0.0f, 1.0f);
-
-		std::vector<int> ind = {0, 1, 3, 1, 2, 3};
-
-		vb.Create(vert, ind);
+		vb.Create(Wave::Cube::GetVertices());
+		camera = new Wave::Camera(60, Window::GetWidth(), Window::GetHeight(), 0.1f, 1000.f);
+	}
+	void App::Update(float deltaTime)
+	{
+		auto inputHandler = GetInputHandler();
+		if (inputHandler.IsMouseRepeat(GLFW_MOUSE_BUTTON_2))
+		{
+			if (inputHandler.IsKeyRepeat(GLFW_KEY_W)) camera->Move(Direction::Forward, deltaTime);
+			if (inputHandler.IsKeyRepeat(GLFW_KEY_S)) camera->Move(Direction::Backward, deltaTime);
+			if (inputHandler.IsKeyRepeat(GLFW_KEY_A)) camera->Move(Direction::Left, deltaTime);
+			if (inputHandler.IsKeyRepeat(GLFW_KEY_D)) camera->Move(Direction::Right, deltaTime);
+			if (inputHandler.IsKeyRepeat(GLFW_KEY_SPACE)) camera->Move(Direction::Up, deltaTime);
+			if (inputHandler.IsKeyRepeat(GLFW_KEY_LEFT_CONTROL)) camera->Move(Direction::Down, deltaTime);
+			auto offset = inputHandler.GetCursor().GetOffset();
+			camera->Cursor(offset.x, offset.y);
+		}
 	}
 
-	void App::Update(float delta_time)
+	void App::Render(float deltaTime)
 	{
-
-	}
-
-	void App::Render(float delta_time)
-	{
-		// glActiveTexture(GL_TEXTURE0);
 		auto& tm = Wave::TextureManager::GetInstance();
-		tm.Bind(temp1);
+		
+		glActiveTexture(GL_TEXTURE0);
+		tm.Bind(texId1);
+		glActiveTexture(GL_TEXTURE1);
+		tm.Bind(texId2);
+
 		shader.Begin();
+
+		shader.SetMat4("projection", camera->GetProjectionMatrix());
+		shader.SetMat4("view", camera->GetViewMatrix());
+
+		glm::vec3 cubePositions[] = {
+			glm::vec3(0.0f,  0.0f,  0.0f),
+			glm::vec3(2.0f,  5.0f, -15.0f),
+			glm::vec3(-1.5f, -2.2f, -2.5f),
+			glm::vec3(-3.8f, -2.0f, -12.3f),
+			glm::vec3(2.4f, -0.4f, -3.5f),
+			glm::vec3(-1.7f,  3.0f, -7.5f),
+			glm::vec3(1.3f, -2.0f, -2.5f),
+			glm::vec3(1.5f,  2.0f, -2.5f),
+			glm::vec3(1.5f,  0.2f, -1.5f),
+			glm::vec3(-1.3f,  1.0f, -1.5f)
+		};
+
+		// render boxes
+		vb.Bind();
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			// calculate the model matrix for each object and pass it to shader before drawing
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			shader.SetMat4("model", model);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+
 		vb.Draw();
 		shader.End();
 	}

@@ -30,6 +30,8 @@
 #include "util/log.h"
 #include "util/util.h"
 
+enum class Direction { Forward, Backward, Right, Left, Up, Down };
+
 #ifndef WAVE_OPENGL_VERSION
 #define WAVE_OPENGL_VERSION 410
 #endif // !WAVE_OPENGL_VERSION

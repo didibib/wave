@@ -51,16 +51,21 @@ namespace Wave
 	void VertexBuffer::Bind()
 	{
 		glBindVertexArray(mVAO);
+		isBind = true;
 	}
 
 	void VertexBuffer::Unbind()
 	{
 		glBindVertexArray(0);
+		isBind = false;
 	}
 
 	void VertexBuffer::Draw()
 	{
-		Bind();
+		if (!isBind)
+		{
+			ERROR("Forgot to bind the buffer");
+		}
 		if (mEBO != 0)
 		{
 			glDrawElements(GL_TRIANGLES, mIndicesSize, GL_UNSIGNED_INT, 0);
@@ -69,6 +74,5 @@ namespace Wave
 		{
 			glDrawArrays(GL_TRIANGLES, 0, mVerticesSize);
 		}
-		Unbind();
 	}
 }

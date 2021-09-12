@@ -17,7 +17,7 @@ include(cmake/ignore_precompiled_header.cmake)
 include(cmake/set_target_output_directories.cmake)
 
 # Set the project name and version
-project(wave-engine VERSION 1.0)
+project(WaveEngine VERSION 1.0)
 
 # Use folder structure 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

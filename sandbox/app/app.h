@@ -2,7 +2,7 @@
 
 #include "window/window_glfw.h"
 
-namespace sandbox
+namespace Sandbox
 {
 	class App : public Wave::WindowGlfw
 	{
@@ -10,12 +10,13 @@ namespace sandbox
 		App() = delete;
 		App(int width, int height, const char* weather);
 	protected:
-		void Update(float delta_time) override;
-		void Render(float delta_time) override;
+		void Update(float deltaTime) override;
+		void Render(float deltaTime) override;
 	private:
+		Wave::Camera* camera;
 		Wave::Shader shader;
 		Wave::VertexBuffer vb;
 
-		GLuint temp1, temp2;
+		GLuint texId1, texId2;
 	};
 }

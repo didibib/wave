@@ -4,7 +4,7 @@
 
 namespace Wave
 {
-	class WindowGlfw : Window
+	class WindowGlfw : public Window
 	{
 	public:
 		WindowGlfw() = delete;
@@ -13,23 +13,25 @@ namespace Wave
 	public:
 		void Run() override;
 		void* GetNativeWindow() override { return mGlfwWindow; }
+		float GetDeltaTime() { return mDeltaTime; }
+		EventHandler GetInputHandler() { return mInputHandler; }
 	protected:
 		virtual void Update(float delta_time) = 0;
 		virtual void Render(float delta_time) = 0;
 	private:
 		void Clear();
 		void UpdateTime();
-	protected:
-		float mDeltaTime = 0;
-		InputHandler mInputHandler;
 	private:
-		GLFWwindow* mGlfwWindow = nullptr;
+		float mDeltaTime = 0;
 		float mCurrentTime = 0, mPreviousTime = 0;
+		GLFWwindow* mGlfwWindow = nullptr;
+		EventHandler mInputHandler;
 	private:
 		std::unique_ptr<ImGuiContext> mImGuiContext;
 	private:
-		const uint mBufferSize = 16;
-		std::queue<std::unique_ptr<InputHandler::InputEvent>> mEventBuffer;
+		const uint mMaxBufferSize = 16;
+		std::queue<std::unique_ptr<Event>> mEventBuffer;
+		template<typename T> void TrimBuffer(std::queue<T>& buffer);
 	private:
 		void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int modes);
 		void MouseCallback(GLFWwindow* window, int button, int action, int mods);

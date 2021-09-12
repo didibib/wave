@@ -1,5 +1,5 @@
 #include "pch/wavepch.h"
-#include "events/input.h"
+#include "event/event_handler.h"
 #include "context/imgui_context.h"
 #include "window_glfw.h"
 
@@ -26,6 +26,8 @@ namespace Wave
 		{
 			CRITICAL("Failed to initialize OpengGL context");
 		}
+		glEnable(GL_DEPTH_TEST);
+
 		SetupCallbacks();
 
 		mImGuiContext = std::make_unique<ImGuiContext>();
@@ -44,20 +46,20 @@ namespace Wave
 	{
 		while (!glfwWindowShouldClose(mGlfwWindow))
 		{
-			glfwPollEvents();
 			UpdateTime();
 
 			mInputHandler.Update(mEventBuffer);
 
-			Clear();
-
-			Update(mDeltaTime);
 			mImGuiContext->Update();
+			Update(mDeltaTime);
 
+			Clear();
 			Render(mDeltaTime);
 			mImGuiContext->Render();
 
+			mInputHandler.Flush();
 			glfwSwapBuffers(mGlfwWindow);
+			glfwPollEvents();
 		}
 	}
 
@@ -65,7 +67,7 @@ namespace Wave
 	{
 		glm::vec4 clear_color = glm::vec4(0.45f, 0.55f, 0.60f, 1.00f);
 		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void WindowGlfw::UpdateTime()
@@ -75,30 +77,44 @@ namespace Wave
 		mPreviousTime = mCurrentTime;
 	}
 
+	template<typename T>
+	void WindowGlfw::TrimBuffer(std::queue<T>& buffer)
+	{
+		while (buffer.size() > mMaxBufferSize)
+		{
+			buffer.pop();
+		}
+	}
+
 #pragma region _____CALLBACKS
 	void WindowGlfw::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-		mEventBuffer.emplace(std::make_unique<InputHandler::KeyEvent>(key, scancode, action, mods));
+		mEventBuffer.emplace(std::make_unique<KeyEvent>(key, scancode, action, mods));
+		TrimBuffer(mEventBuffer);
 	}
 
 	void WindowGlfw::MouseCallback(GLFWwindow* window, int button, int action, int mods)
 	{
-		mEventBuffer.emplace(std::make_unique<InputHandler::MouseEvent>(button, action, mods));
+		mEventBuffer.emplace(std::make_unique<MouseEvent>(button, action, mods));
+		TrimBuffer(mEventBuffer);
 	}
 
 	void WindowGlfw::CursorCallback(GLFWwindow* window, double xPos, double yPos)
 	{
-		mEventBuffer.emplace(std::make_unique<InputHandler::CursorEvent>(xPos, yPos));
+		mEventBuffer.emplace(std::make_unique<CursorEvent>(xPos, yPos));
+		TrimBuffer(mEventBuffer);
 	}
 
 	void WindowGlfw::CursorEnterCallback(GLFWwindow* window, int entered)
 	{
-		mInputHandler.GetCursor().SetState(entered);
+		mEventBuffer.emplace(std::make_unique<CursorEnterEvent>(entered));
+		TrimBuffer(mEventBuffer);
 	}
 
 	void WindowGlfw::ScrollCallback(GLFWwindow* window, double x_offset, double y_offset)
 	{
-		mEventBuffer.emplace(std::make_unique<InputHandler::ScrollEvent>(x_offset, y_offset));
+		mEventBuffer.emplace(std::make_unique<ScrollEvent>(x_offset, y_offset));
+		TrimBuffer(mEventBuffer);
 	}
 
 	void WindowGlfw::WindowCloseCallback(GLFWwindow* window)
@@ -108,12 +124,13 @@ namespace Wave
 
 	void WindowGlfw::WindowFocusCallback(GLFWwindow* window, int focused)
 	{
-		mInputHandler.GetCursor().SetState(focused);
+		mEventBuffer.emplace(std::make_unique<WindowFocusEvent>(focused));
+		TrimBuffer(mEventBuffer);
 	}
 
 	void WindowGlfw::WindowSizeCallback(GLFWwindow* window, int width, int height)
 	{
-		
+
 	}
 
 	void WindowGlfw::FramebufferSizeCallback(GLFWwindow* window, int width, int height)

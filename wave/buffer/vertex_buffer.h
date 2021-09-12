@@ -8,10 +8,10 @@ namespace Wave
 		void Create(std::vector<Vertex> vertices);
 		void Create(std::vector<Vertex> vertices, std::vector<int> indices);
 		void Draw();
-	private:
 		void Bind();
 		void Unbind();
 	private:
+		bool isBind;
 		int mVerticesSize;
 		int mIndicesSize;
 		GLuint mVAO;
