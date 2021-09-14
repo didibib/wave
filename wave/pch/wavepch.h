@@ -30,7 +30,11 @@
 #include "util/log.h"
 #include "util/util.h"
 
-enum class Direction { Forward, Backward, Right, Left, Up, Down };
+namespace Wave
+{
+	// Order of these enum is important
+	enum class Direction { Forward, Right, Up, Backward, Left, Down };
+}
 
 #ifndef WAVE_OPENGL_VERSION
 #define WAVE_OPENGL_VERSION 410

@@ -1,5 +1,5 @@
 #include "pch/sandboxpch.h"
-#include "app/app.h"
+#include "app.h"
 
 int main()
 {

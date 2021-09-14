@@ -1,6 +1,6 @@
 #include "pch/wavepch.h"
 #include "event/event_handler.h"
-#include "context/imgui_context.h"
+#include "imgui/imgui_context.h"
 #include "window_glfw.h"
 
 namespace Wave
@@ -8,9 +8,9 @@ namespace Wave
 	WindowGlfw::WindowGlfw(int width, int height, const char* title) : Window(width, height, title)
 	{
 		TRACE("Initializing window: {}", title);
+
 		glfwInit();
 		// Window hints need to be set before the creation of the window. They function as additional arguments to glfwCreateWindow.
-		TRACE("[OPENGL VERSION:{}][MAX:{}][MIN:{}]", WAVE_OPENGL_VERSION, WAVE_OPENGL_VERSION_MAJ, WAVE_OPENGL_VERSION_MIN);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, WAVE_OPENGL_VERSION_MAJ);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, WAVE_OPENGL_VERSION_MIN);
 		mGlfwWindow = glfwCreateWindow(width, height, title, nullptr, nullptr);
@@ -26,6 +26,18 @@ namespace Wave
 		{
 			CRITICAL("Failed to initialize OpengGL context");
 		}
+
+		TRACE("Checking system OpenGL version");
+		GLint glMaj, glMin;
+		glGetIntegerv(GL_MAJOR_VERSION, (&glMaj));
+		glGetIntegerv(GL_MINOR_VERSION, (&glMin));
+		TRACE("System OpenGL version : [{}.{}]", glMaj, glMin);
+		TRACE("Wave OpenGL version : [{}.{}]", WAVE_OPENGL_VERSION_MAJ, WAVE_OPENGL_VERSION_MIN);
+		if (glMaj < WAVE_OPENGL_VERSION_MAJ && glMin < WAVE_OPENGL_VERSION_MIN)
+		{
+			CRITICAL("System doesn't meet the OpenGL version criteria");
+		}
+
 		glEnable(GL_DEPTH_TEST);
 
 		SetupCallbacks();

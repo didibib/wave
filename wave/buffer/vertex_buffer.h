@@ -5,6 +5,7 @@ namespace Wave
 	class VertexBuffer
 	{
 	public:
+		VertexBuffer();
 		void Create(std::vector<Vertex> vertices);
 		void Create(std::vector<Vertex> vertices, std::vector<int> indices);
 		void Draw();

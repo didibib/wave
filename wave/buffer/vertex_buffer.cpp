@@ -3,6 +3,12 @@
 
 namespace Wave
 {
+	VertexBuffer::VertexBuffer() :
+		isBind(false), mVerticesSize(0), mIndicesSize(0), 
+		mVAO(0), mVBO(0), mEBO(0)
+	{
+	}
+
 	void VertexBuffer::Create(std::vector<Vertex> vertices)
 	{
 		Create(vertices, std::vector<int>());
@@ -41,6 +47,9 @@ namespace Wave
 		// UV (location = 2) 
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 		glEnableVertexAttribArray(2);
+		// Normal (location = 3
+		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+		glEnableVertexAttribArray(3);
 
 		// Unbind buffers
 		glBindBuffer(GL_ARRAY_BUFFER, 0);

@@ -6,7 +6,7 @@ namespace Wave
 	Camera::Camera(float fov, int viewWidth, int viewHeight, float near, float far) 
 		// Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector 
 		// pointing to the right so we initially rotate a bit to the left.
-		: Object({0, 0, 0}), mYaw(-90), mPitch(0)
+		: Object({0, 0, 3}), mYaw(-90), mPitch(0)
 	{
 		mFov = fov;
 		mViewWidth = viewWidth;
@@ -58,7 +58,7 @@ namespace Wave
 
 	glm::mat4 Camera::GetViewMatrix()
 	{
-		return glm::lookAt(mPosition, mPosition + mForward, mUp); 
+		return glm::lookAt(mPosition, mPosition + mForward, mUp);
 	}
 
 	void Camera::OnWindowResize(int width, int height)
@@ -78,7 +78,8 @@ namespace Wave
 		forward.z = sin(glm::radians(mYaw)) * cos(glm::radians(mPitch));
 		mForward = glm::normalize(forward);
 		// Also re-calculate the Right and Up vector
-		mRight = glm::normalize(glm::cross(mForward, mWorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
+		// normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
+		mRight = glm::normalize(glm::cross(mForward, mWorldUp));  
 		mUp = glm::normalize(glm::cross(mRight, mForward));
 	}
 }

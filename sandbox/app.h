@@ -16,6 +16,7 @@ namespace Sandbox
 		Wave::Camera* camera;
 		Wave::Shader shader;
 		Wave::VertexBuffer vb;
+		Wave::Light light;
 
 		GLuint texId1, texId2;
 	};

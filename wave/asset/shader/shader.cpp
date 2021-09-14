@@ -63,8 +63,7 @@ namespace Wave
 			// Exit with failure.
 			glDeleteShader(shader_id); // Don't leak the Shader.
 
-			ERROR("Shader failed to compile: {}", file);
-			ERROR(&(error_log[0]));
+			ERROR("Shader failed to compile\n{}", &(error_log[0]));
 			return false;
 		}
 		return shader_id;

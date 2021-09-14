@@ -129,9 +129,6 @@ namespace Wave
 			mOffset.y = mLastPos.y - yPos; 
 			mLastPos.x = xPos;
 			mLastPos.y = yPos;
-
-			DEBUG("X:{}, Y:{}", xPos, yPos);
-			DEBUG("XOFF:{}, YOFF:{}", mOffset.x, mOffset.y);
 		}
 		void Flush()
 		{

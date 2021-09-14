@@ -7,9 +7,9 @@ set(SANDBOX_PCH_CPP
 )
 
 set(SANDBOX_SOURCE_LIST
-    "app/app.h"
-    "app/app.cpp"
-    "main/main.cpp"
+    "app.h"
+    "app.cpp"
+    "main.cpp"
     ${SANDBOX_PCH_H}
     ${SANDBOX_PCH_CPP}
 )
