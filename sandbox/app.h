@@ -18,6 +18,6 @@ namespace Sandbox
 		Wave::VertexBuffer vb;
 		Wave::Light light;
 
-		GLuint texId1, texId2;
+		GLuint texId0, texId1;
 	};
 }

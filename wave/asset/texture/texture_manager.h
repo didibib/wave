@@ -15,7 +15,7 @@ namespace Wave
         }
     public:
         std::optional<GLuint> Load(std::string filename);
-        void Bind(GLuint id);
+        void Bind(GLuint id, GLenum textureUnit);
         void Unbind();
     private:
         TextureManager();

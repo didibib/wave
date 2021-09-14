@@ -78,8 +78,9 @@ namespace Wave
 		return id;
 	}
 
-	void TextureManager::Bind(GLuint id)
+	void TextureManager::Bind(GLuint id, GLenum textureUnit)
 	{
+		glActiveTexture(textureUnit);
 		glBindTexture(GL_TEXTURE_2D, id);
 	}
 

@@ -6,8 +6,8 @@ namespace Sandbox
 	App::App(int width, int height, const char* weather) : Wave::WindowGlfw(width, height, weather)
 	{
 		auto& tm = Wave::TextureManager::GetInstance();
-		texId1 = *tm.Load("brick_wall.jpg");
-		texId2 = *tm.Load("awesomeface.png");
+		texId0 = *tm.Load("brick_wall.jpg");
+		texId1 = *tm.Load("awesomeface.png");
 
 		shader.Load("phong");
 		shader.Begin();
@@ -53,10 +53,8 @@ namespace Sandbox
 
 		auto& tm = Wave::TextureManager::GetInstance();
 		
-		glActiveTexture(GL_TEXTURE0);
-		tm.Bind(texId1);
-		glActiveTexture(GL_TEXTURE1);
-		tm.Bind(texId2);
+		tm.Bind(texId0, GL_TEXTURE0);
+		tm.Bind(texId1, GL_TEXTURE1);
 
 		shader.Begin();
 		shader.SetMat4("projection", camera->GetProjMatrix());
