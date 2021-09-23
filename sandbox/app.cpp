@@ -3,16 +3,18 @@
 
 namespace Sandbox
 {
-	App::App(int width, int height, const char* weather) : Wave::WindowGlfw(width, height, weather)
+	App::App(int width, int height, const char* title) : Wave::WindowGlfw(width, height, title)
 	{
 		auto& tm = Wave::TextureManager::GetInstance();
-		texId0 = *tm.Load("brick_wall.jpg");
-		texId1 = *tm.Load("awesomeface.png");
+		tm.Load("container_diffuse.png", "container_diffuse");
+		tm.Load("container_specular.png", "container_specular");
+		tm.Load("matrix.jpg", "matrix");
 
 		shader.Load("phong");
 		shader.Begin();
-		shader.SetInt("texture0", 0);
-		shader.SetInt("texture1", 1);
+		shader.SetInt("material.diffuse", 0);
+		shader.SetInt("material.specular", 1);
+		shader.SetInt("material.emission", 2);
 		shader.End();
 
 		vb.Create(Wave::Cube::GetVertices());
@@ -53,22 +55,22 @@ namespace Sandbox
 
 		auto& tm = Wave::TextureManager::GetInstance();
 		
-		tm.Bind(texId0, GL_TEXTURE0);
-		tm.Bind(texId1, GL_TEXTURE1);
+		tm.Bind("container_diffuse", GL_TEXTURE0);
+		tm.Bind("container_specular", GL_TEXTURE1);
+		tm.Bind("matrix", GL_TEXTURE2);
 
 		shader.Begin();
-		shader.SetMat4("projection", camera->GetProjMatrix());
-		shader.SetMat4("view", camera->GetViewMatrix());
-		shader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
-		shader.SetVec3("lightColor", light.GetColor());
+		shader.SetMat4("u_Projection", camera->GetProjMatrix());
+		shader.SetMat4("u_View", camera->GetViewMatrix());
+		shader.SetVec3("u_ViewPosition", camera->GetPos());
 
-		float lightX = 2.0f * sin(glfwGetTime());
-		float lightY = -0.3f;
-		float lightZ = 1.5f * cos(glfwGetTime());
-		light.SetPos(lightX, lightY, lightZ);
-		shader.SetVec3("lightPosition", light.GetPos());
-		shader.SetFloat("lightStrength", light.GetStrength());
-		shader.SetVec3("viewPosition", camera->GetPos());
+		shader.SetVec3("u_Light.position", light.GetPos());
+		shader.SetVec3("u_Light.ambient", light.GetAmbient());
+		shader.SetVec3("u_Light.diffuse", light.GetDiffuse());
+		shader.SetVec3("u_Light.specular", light.GetSpecular());
+		shader.SetFloat("u_Light.strength", light.GetStrength());
+
+		shader.SetFloat("u_Material.shininess", 32.0f);
 
 		// Render boxes
 		vb.Bind();
@@ -81,8 +83,8 @@ namespace Sandbox
 			//model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			glm::mat4 normalMatrix = glm::transpose(glm::inverse(model));
 						
-			shader.SetMat4("model", model);
-			shader.SetMat4("normalMatrix", normalMatrix);
+			shader.SetMat4("u_Model", model);
+			shader.SetMat4("u_NormalMatrix", normalMatrix);
 
 			vb.Draw();
 		}

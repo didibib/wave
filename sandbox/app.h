@@ -8,7 +8,7 @@ namespace Sandbox
 	{
 	public:
 		App() = delete;
-		App(int width, int height, const char* weather);
+		App(int width, int height, const char* title);
 	protected:
 		void Update(float deltaTime) override;
 		void Render(float deltaTime) override;
@@ -18,6 +18,5 @@ namespace Sandbox
 		Wave::VertexBuffer vb;
 		Wave::Light light;
 
-		GLuint texId0, texId1;
 	};
 }

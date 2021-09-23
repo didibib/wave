@@ -54,7 +54,7 @@ set(FREE_IMAGE_DLL      ${VENDOR_DIR}/freeimage/FreeImage.dll)
 set(FREE_IMAGE_LIB      ${VENDOR_DIR}/freeimage/FreeImage.lib)
 
 message(STATUS "Adding subdirectory 'wave'")
-add_subdirectory(wave)
+add_subdirectory(src)
 
 message(STATUS "Adding subdirectory 'sandbox'")
 add_subdirectory(sandbox)
