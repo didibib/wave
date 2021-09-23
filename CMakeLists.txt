@@ -29,7 +29,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 
-# Update all git submodules
+# Update all git submodules, function can be found in: cmake/
 update_submodules()
 
 # Start building
@@ -62,4 +62,5 @@ add_subdirectory(sandbox)
 message(STATUS "Linking static lib 'subdio' with executable 'sandbox'")
 target_link_libraries(sandbox PRIVATE wave)
 
+# function can be found in: cmake/
 set_startup_project(sandbox)
