@@ -13,10 +13,10 @@ namespace Sandbox
 		void Update(float deltaTime) override;
 		void Render(float deltaTime) override;
 	private:
-		Wave::Camera* camera;
-		Wave::Shader shader;
-		Wave::VertexBuffer vb;
-		Wave::Light light;
+		Wave::Camera* m_Camera;
+		Wave::Shader m_Shader;
+		Wave::VertexBuffer m_Vb;
+		Wave::Light m_Light;
 
 	};
 }
