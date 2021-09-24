@@ -11,10 +11,10 @@ namespace Wave
 
 	void VertexBuffer::Create(std::vector<Vertex> vertices)
 	{
-		Create(vertices, std::vector<int>());
+		Create(vertices, std::vector<uint>());
 	}
 
-	void VertexBuffer::Create(std::vector<Vertex> vertices, std::vector<int> indices)
+	void VertexBuffer::Create(std::vector<Vertex> vertices, std::vector<uint> indices)
 	{
 		m_nVertices = vertices.size();
 		m_nIndices = indices.size();
@@ -39,16 +39,16 @@ namespace Wave
 		}
 		// Set attributes
 		// Position (location = 0)
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Position));
 		glEnableVertexAttribArray(0);
 		// Color (location = 1)
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Color));
 		glEnableVertexAttribArray(1);
 		// UV (location = 2) 
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Uv));
 		glEnableVertexAttribArray(2);
 		// Normal (location = 3
-		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
 		glEnableVertexAttribArray(3);
 
 		// Unbind buffers

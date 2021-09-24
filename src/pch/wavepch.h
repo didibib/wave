@@ -29,6 +29,8 @@
 // Utility
 #include "util/log.h"
 #include "util/util.h"
+#include "scene/mesh/vertex.h"
+#include "scene/texture/texture.h"
 
 namespace Wave
 {

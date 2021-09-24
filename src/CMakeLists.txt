@@ -7,25 +7,28 @@ set(WAVE_PCH_CPP
     "pch/wavepch.cpp"
 )
 
-set(WAVE_SOURCE_LIST
-    "asset/shader/shader.h"
-    "asset/shader/shader.cpp"
-    "asset/shader/shader_manager.h"
-    "asset/shader/shader_manager.cpp"
-    "asset/texture/texture.h"
-    "asset/texture/texture_manager.h"
-    "asset/texture/texture_manager.cpp"    
-    "buffer/vertex_buffer.h"
-    "buffer/vertex_buffer.cpp"    
+set(WAVE_SOURCE_LIST       
     "imgui/imgui_context.h"
     "imgui/imgui_context.cpp"    
-    "entity/camera/camera.h"
-    "entity/camera/camera.cpp"
-    "entity/light/light.h"
-    "entity/light/light.cpp"
-    "entity/mesh/cube.h"
-    "entity/object/object.h"
-    "entity/object/object.cpp"
+    "scene/camera/camera.h"
+    "scene/camera/camera.cpp"
+    "scene/light/light.h"
+    "scene/light/light.cpp"
+    "scene/mesh/cube.h"
+    "scene/mesh/mesh.h"
+    "scene/mesh/mesh.cpp"
+    "scene/mesh/vertex.h"
+    "scene/mesh/vertex_buffer.h"
+    "scene/mesh/vertex_buffer.cpp"    
+    "scene/shader/shader.h"
+    "scene/shader/shader.cpp"
+    "scene/shader/shader_manager.h"
+    "scene/shader/shader_manager.cpp"
+    "scene/texture/texture.h"
+    "scene/texture/texture_manager.h"
+    "scene/texture/texture_manager.cpp" 
+    "scene/object/object.h"
+    "scene/object/object.cpp"
     "event/event.h"
     "event/event_handler.h"
     "event/event_handler.cpp"
@@ -78,4 +81,5 @@ target_link_libraries(wave PUBLIC
     spdlog::spdlog
     imgui
     ${FREE_IMAGE_LIB}
+    assimp
 )

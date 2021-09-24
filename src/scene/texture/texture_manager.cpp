@@ -1,5 +1,4 @@
 #include "pch/wavepch.h"
-#include "texture.h"
 #include "texture_manager.h"
 
 namespace Wave
@@ -85,7 +84,7 @@ namespace Wave
 		{
 			auto texture = (*it).second;
 			glActiveTexture(textureUnit);
-			glBindTexture(GL_TEXTURE_2D, texture.GetId());
+			glBindTexture(GL_TEXTURE_2D, texture.Id);
 		}
 	}
 
@@ -96,8 +95,9 @@ namespace Wave
 
 	void TextureManager::AddTexture(std::string key, GLuint id, uint width, uint height)
 	{
-		auto pair = std::pair<std::string, Texture>(key, Texture(id, width, height));
+		auto pair = std::pair<std::string, Texture>(key, { id, width, height });
 		m_TextureMap.insert(pair);
+		TRACE("Added texture: {}", key);
 	}
 
 	void TextureManager::DeleteTexture(std::string key)

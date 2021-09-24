@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entity/object/object.h"
+#include "scene/object/object.h"
 
 namespace Wave
 {

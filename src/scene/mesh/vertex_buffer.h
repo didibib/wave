@@ -7,11 +7,10 @@ namespace Wave
 	public:
 		VertexBuffer();
 		void Create(std::vector<Vertex> vertices);
-		void Create(std::vector<Vertex> vertices, std::vector<int> indices);
+		void Create(std::vector<Vertex> vertices, std::vector<uint> indices);
 		void Draw();
 		void Bind();
 		void Unbind();
-
 	private:
 		bool m_IsBind;
 		int m_nVertices;

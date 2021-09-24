@@ -40,6 +40,7 @@ message(STATUS "Adding subdirectory 'imgui'")
 add_subdirectory(${VENDOR_DIR}/imgui)
 
 message(STATUS "Adding subdirectory 'glfw'")
+set(GLFW_BUILD_DOCS OFF)
 add_subdirectory(${VENDOR_DIR}/glfw)
 
 message(STATUS "Adding subdirectory 'glm'")
@@ -48,18 +49,26 @@ add_subdirectory(${VENDOR_DIR}/glm)
 message(STATUS "Adding subdirectory 'spdlog'")
 add_subdirectory(${VENDOR_DIR}/spdlog)
 
+message(STATUS "Adding subdirectory 'assimp'")
+# We want to link assimp statically, otherwise we have to copy the dll to the .exe
+set(BUILD_SHARED_LIBS OFF)
+set(ASSIMP_BUILD_TESTS OFF)
+set(ASSIMP_BUILD_ASSIMP_TOOLS OFF) 
+add_subdirectory(${VENDOR_DIR}/assimp)
+
 message(STATUS "Setting FreeImage variables")
+# We use these variables for 'wave' project
 set(FREE_IMAGE_INCLUDE  ${VENDOR_DIR}/freeimage/include)
 set(FREE_IMAGE_DLL      ${VENDOR_DIR}/freeimage/FreeImage.dll)
 set(FREE_IMAGE_LIB      ${VENDOR_DIR}/freeimage/FreeImage.lib)
 
-message(STATUS "Adding subdirectory 'wave'")
+message(STATUS "Adding subdirectory 'src'")
 add_subdirectory(src)
 
 message(STATUS "Adding subdirectory 'sandbox'")
 add_subdirectory(sandbox)
 
-message(STATUS "Linking static lib 'subdio' with executable 'sandbox'")
+message(STATUS "Linking static lib 'wave' with executable 'sandbox'")
 target_link_libraries(sandbox PRIVATE wave)
 
 # function can be found in: cmake/
