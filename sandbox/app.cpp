@@ -3,7 +3,7 @@
 
 namespace Sandbox
 {
-	App::App(int width, int height, const char* title) : Wave::WindowGlfw(width, height, title)
+	App::App(int const& width, int const& height, const char* title) : Wave::WindowGlfw(width, height, title)
 	{
 		auto& tm = Wave::TextureManager::GetInstance();
 		tm.Load("container_diffuse.png", "container_diffuse");
@@ -23,7 +23,7 @@ namespace Sandbox
 		m_Camera->SetPos({ 0, 0, 3 });
 		m_Light.SetPos({ 0.f, 3.f, 0.f });
 	}
-	void App::Update(float deltaTime)
+	void App::Update(float const& deltaTime)
 	{
 		auto inputHandler = GetInputHandler();
 		if (inputHandler.IsMouseRepeat(GLFW_MOUSE_BUTTON_2))
@@ -39,7 +39,7 @@ namespace Sandbox
 		}
 	}
 
-	void App::Render(float deltaTime)
+	void App::Render(float const& deltaTime)
 	{
 		glm::vec3 cubePositions[] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),

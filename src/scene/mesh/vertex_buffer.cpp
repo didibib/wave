@@ -9,12 +9,12 @@ namespace Wave
 	{
 	}
 
-	void VertexBuffer::Create(std::vector<Vertex> vertices)
+	void VertexBuffer::Create(std::vector<Vertex> const& vertices)
 	{
 		Create(vertices, std::vector<uint>());
 	}
 
-	void VertexBuffer::Create(std::vector<Vertex> vertices, std::vector<uint> indices)
+	void VertexBuffer::Create(std::vector<Vertex> const& vertices, std::vector<uint> const& indices)
 	{
 		m_nVertices = vertices.size();
 		m_nIndices = indices.size();
@@ -57,23 +57,24 @@ namespace Wave
 		glBindVertexArray(0);
 	}
 
-	void VertexBuffer::Bind()
+	void VertexBuffer::Bind() const
 	{
 		glBindVertexArray(m_VAO);
 		m_IsBind = true;
 	}
 
-	void VertexBuffer::Unbind()
+	void VertexBuffer::Unbind() const
 	{
 		glBindVertexArray(0);
 		m_IsBind = false;
 	}
 
-	void VertexBuffer::Draw()
+	void VertexBuffer::Draw() const
 	{
 		if (!m_IsBind)
 		{
 			ERROR("Forgot to bind the buffer");
+			return;
 		}
 		if (m_EBO != 0)
 		{

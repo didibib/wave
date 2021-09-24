@@ -11,8 +11,8 @@ namespace Wave
 		TRACE("Texture manager constructed");
 	}
 
-	std::optional<GLuint> TextureManager::Load(std::string filename, std::string key)
-	{		
+	std::optional<GLuint> TextureManager::Load(std::string const& filename, std::string const& key)
+	{
 		// wave_asset_dir is defined in wavepch.h
 		std::string filepath = m_TextureDir + filename;
 
@@ -77,7 +77,7 @@ namespace Wave
 		return id;
 	}
 
-	void TextureManager::Bind(std::string key, GLenum textureUnit)
+	void TextureManager::Bind(std::string const& key, GLenum textureUnit)
 	{
 		auto it = m_TextureMap.find(key);
 		if (it != m_TextureMap.end())
@@ -93,14 +93,14 @@ namespace Wave
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void TextureManager::AddTexture(std::string key, GLuint id, uint width, uint height)
+	void TextureManager::AddTexture(std::string const& key, GLuint id, uint width, uint height)
 	{
 		auto pair = std::pair<std::string, Texture>(key, { id, width, height });
 		m_TextureMap.insert(pair);
 		TRACE("Added texture: {}", key);
 	}
 
-	void TextureManager::DeleteTexture(std::string key)
+	void TextureManager::DeleteTexture(std::string const& key)
 	{
 		auto it = m_TextureMap.find(key);
 		if (it != m_TextureMap.end())
@@ -109,7 +109,7 @@ namespace Wave
 		}
 	}
 
-	std::optional<TextureManager::Format> TextureManager::GetFormat(FREE_IMAGE_FORMAT fif)
+	std::optional<TextureManager::Format> TextureManager::GetFormat(const FREE_IMAGE_FORMAT fif)
 	{
 		Format format;
 		switch (fif)

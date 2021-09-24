@@ -58,32 +58,32 @@ namespace Wave
 		m_Scroll.Flush();
 	}
 
-	bool EventHandler::IsKeyPressed(int key)
+	bool EventHandler::IsKeyPressed(int const& key)
 	{
 		return m_KeyStates[key] == GLFW_PRESS;
 	}
 
-	bool EventHandler::IsKeyRepeat(int key)
+	bool EventHandler::IsKeyRepeat(int const& key)
 	{
 		return m_KeyStates[key] == GLFW_PRESS || m_KeyStates[key] == GLFW_REPEAT;
 	}
 
-	bool EventHandler::IsKeyReleased(int key)
+	bool EventHandler::IsKeyReleased(int const& key)
 	{
 		return m_KeyStates[key] == GLFW_RELEASE;
 	}
 
-	bool EventHandler::IsMousePressed(int button)
+	bool EventHandler::IsMousePressed(int const& button)
 	{
 		return m_MouseStates[button] == GLFW_PRESS;
 	}
 
-	bool EventHandler::IsMouseRepeat(int button)
+	bool EventHandler::IsMouseRepeat(int const& button)
 	{
 		return m_MouseStates[button] == GLFW_PRESS || m_MouseStates[button] == GLFW_REPEAT;
 	}
 
-	bool EventHandler::IsMouseReleased(int button)
+	bool EventHandler::IsMouseReleased(int const& button)
 	{
 		return m_MouseStates[button] == GLFW_RELEASE;
 	}

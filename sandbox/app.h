@@ -8,10 +8,10 @@ namespace Sandbox
 	{
 	public:
 		App() = delete;
-		App(int width, int height, const char* title);
+		App(int const& width, int const& height, const char* title);
 	protected:
-		void Update(float deltaTime) override;
-		void Render(float deltaTime) override;
+		void Update(float const& deltaTime) override;
+		void Render(float const& deltaTime) override;
 	private:
 		Wave::Camera* m_Camera;
 		Wave::Shader m_Shader;

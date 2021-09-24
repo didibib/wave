@@ -8,19 +8,15 @@ namespace Wave
 	{
 	public:
 		Light();
-		Light(glm::vec3 position, glm::vec3 ambient, glm::vec3 diffuse, float strength);
+		Light(glm::vec3 const& ambient, glm::vec3 const& diffuse);
 		glm::vec3 GetAmbient() { return m_Ambient; }
 		glm::vec3 GetDiffuse() { return m_Diffuse; }
 		glm::vec3 GetSpecular() { return m_Specular; }
-		float GetStrength() { return m_Strength; }
-		void SetDiffuse(glm::vec3 color) { m_Diffuse = color; }
-		void SetDiffuse(float r, float g, float b) { m_Diffuse.r = r;  m_Diffuse.g = g; m_Diffuse.b = b; }
-		void SetStrength(float strength) { m_Strength = strength; }
-
+		void SetDiffuse(glm::vec3 const& color);
+		void SetDiffuse(float const& r, float const& g, float const& b);
 	private:
 		glm::vec3 m_Ambient;
 		glm::vec3 m_Diffuse;
 		glm::vec3 m_Specular;
-		float m_Strength;
 	};
 }

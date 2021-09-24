@@ -8,7 +8,7 @@ namespace Wave
 	{
 	public:
 		WindowGlfw() = delete;
-		WindowGlfw(int width, int height, const char* title);
+		WindowGlfw(int const& width, int const& height, const char* title);
 		~WindowGlfw();
 	public:
 		void Run() override;
@@ -16,8 +16,8 @@ namespace Wave
 		float GetDeltaTime() { return m_DeltaTime; }
 		EventHandler GetInputHandler() { return m_InputHandler; }
 	protected:
-		virtual void Update(float deltaTime) = 0;
-		virtual void Render(float deltaTime) = 0;
+		virtual void Update(float const& deltaTime) = 0;
+		virtual void Render(float const& deltaTime) = 0;
 	private:
 		void Clear();
 		void UpdateTime();

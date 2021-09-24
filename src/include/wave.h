@@ -4,7 +4,7 @@
 #include "event/event_handler.h"
 #include "imgui/imgui_context.h"
 #include "window/window.h"
-#include "buffer/vertex_buffer.h"
+#include "scene/mesh/vertex_buffer.h"
 #include "scene/shader/shader.h"
 #include "scene/texture/texture.h"
 #include "scene/texture/texture_manager.h"

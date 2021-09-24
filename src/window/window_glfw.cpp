@@ -5,7 +5,7 @@
 
 namespace Wave
 {
-	WindowGlfw::WindowGlfw(int width, int height, const char* title) : Window(width, height, title)
+	WindowGlfw::WindowGlfw(int const& width, int const& height, const char* title) : Window(width, height, title)
 	{
 		TRACE("Initializing window: {}", title);
 

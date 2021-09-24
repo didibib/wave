@@ -14,13 +14,13 @@ namespace Wave
 		Cursor& GetCursor() { return m_Cursor; }
 		Scroll GetScroll() { return m_Scroll; }
 
-		bool IsKeyPressed(int key);
-		bool IsKeyRepeat(int key);
-		bool IsKeyReleased(int key);
+		bool IsKeyPressed(int const& key);
+		bool IsKeyRepeat(int const& key);
+		bool IsKeyReleased(int const& key);
 
-		bool IsMousePressed(int button);
-		bool IsMouseRepeat(int button);
-		bool IsMouseReleased(int button);
+		bool IsMousePressed(int const& button);
+		bool IsMouseRepeat(int const& button);
+		bool IsMouseReleased(int const& button);
 	private:
 		Cursor m_Cursor;
 		Scroll m_Scroll;

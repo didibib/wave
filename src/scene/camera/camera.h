@@ -8,13 +8,13 @@ namespace Wave
 	{
 	public:
 		Camera() = delete;
-		Camera(float fov, int viewWidth, int viewHeight, float near, float far);
-		void Move(Direction dir, float deltaTime);
+		Camera(float const& fov, int const& viewWidth, int const& viewHeight, float const& near, float const& far);
+		void Move(const Direction& dir, float const& deltaTime);
 		void Cursor(float xOffset, float yOffset);
 		glm::mat4 GetProjMatrix() { return m_Projection; }
 		// Returns the view matrix calculated using Euler Angles and the LookAt Matrix
 		glm::mat4 GetViewMatrix();
-		void OnWindowResize(int width, int height);
+		void OnWindowResize(int const& width, int const& height);
 	private:
 		void UpdateCameraVectors();
 	private:

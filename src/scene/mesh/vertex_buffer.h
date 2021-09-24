@@ -6,13 +6,13 @@ namespace Wave
 	{
 	public:
 		VertexBuffer();
-		void Create(std::vector<Vertex> vertices);
-		void Create(std::vector<Vertex> vertices, std::vector<uint> indices);
-		void Draw();
-		void Bind();
-		void Unbind();
+		void Create(std::vector<Vertex> const& vertices);
+		void Create(std::vector<Vertex> const& vertices, std::vector<uint> const& indices);
+		void Draw() const;
+		void Bind() const;
+		void Unbind() const;
 	private:
-		bool m_IsBind;
+		mutable bool m_IsBind;
 		int m_nVertices;
 		int m_nIndices;
 		GLuint m_VAO;

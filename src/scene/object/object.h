@@ -6,10 +6,9 @@ namespace Wave
 	{
 	public:
 		Object();
-		Object(glm::vec3 pos);
 		glm::vec3 GetPos() { return m_Position; }
-		void SetPos(glm::vec3 pos);
-		void SetPos(float x, float y, float z);
+		void SetPos(glm::vec3 const& pos);
+		void SetPos(float const& x, float const& y, float const& z);
 		glm::vec3 GetForward() { return m_Forward; }
 	protected:
 		glm::vec3 m_Position;

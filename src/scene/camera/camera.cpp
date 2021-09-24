@@ -3,21 +3,17 @@
 
 namespace Wave
 {
-	Camera::Camera(float fov, int viewWidth, int viewHeight, float near, float far) 
+	Camera::Camera(float const& fov, int const& viewWidth, int const& viewHeight, float const& near, float const& far)
 		// Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector 
 		// pointing to the right so we initially rotate a bit to the left.
-		: Object({0, 0, 3}), m_Yaw(-90), m_Pitch(0)
+		: m_Yaw(-90), m_Pitch(0),
+		m_Fov(fov), m_ViewWidth(viewWidth), m_ViewHeight(viewHeight), m_Near(near), m_Far(far)
 	{
-		m_Fov = fov;
-		m_ViewWidth = viewWidth;
-		m_ViewHeight = viewHeight;
-		m_Near = near;
-		m_Far = far;
 		m_Projection = glm::perspective(glm::radians(m_Fov), (float)m_ViewWidth / (float)m_ViewHeight, m_Near, m_Far);
 		UpdateCameraVectors();
 	}
 
-	void Camera::Move(Direction dir, float deltaTime)
+	void Camera::Move(const Direction& dir, float const& deltaTime)
 	{
 		float velocity = m_MoveSpeed * deltaTime;
 		switch (dir)
@@ -61,10 +57,12 @@ namespace Wave
 		return glm::lookAt(m_Position, m_Position + m_Forward, m_Up);
 	}
 
-	void Camera::OnWindowResize(int width, int height)
+	void Camera::OnWindowResize(int const& width, int const& height)
 	{
 		if (width > 0 && height > 0)
 		{
+			m_ViewWidth = width;
+			m_ViewHeight = height;
 			m_Projection = glm::perspective(glm::radians(m_Fov), (float)m_ViewWidth / (float)m_ViewHeight, m_Near, m_Far);
 		}
 	}

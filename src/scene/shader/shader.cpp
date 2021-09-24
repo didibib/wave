@@ -12,7 +12,7 @@ namespace Wave
 		glDeleteProgram(m_ProgramId);
 	}
 
-	bool Shader::Load(const std::string filename)
+	bool Shader::Load(std::string const& filename)
 	{
 		const char* c_assets_dir = TOSTRING(ASSETS_DIR);
 		std::string assets_dir(c_assets_dir);
@@ -39,7 +39,7 @@ namespace Wave
 		return true;
 	}
 
-	GLuint Shader::CompileShader(GLenum shader_type, const std::string& file)
+	GLuint Shader::CompileShader(GLenum shader_type, std::string const& file)
 	{
 		GLuint shader_id = glCreateShader(shader_type);
 
@@ -122,7 +122,7 @@ namespace Wave
 		glUseProgram(0);
 	}
 
-	GLuint Shader::GetUniformLocation(const std::string name)
+	GLuint Shader::GetUniformLocation(std::string const& name)
 	{
 		GLuint location = glGetUniformLocation(m_ProgramId, name.c_str());
 		if (location == GL_INVALID_INDEX)
@@ -132,47 +132,47 @@ namespace Wave
 		return location;
 	}
 
-	void Shader::SetInt(const char* name, const int value)
+	void Shader::SetInt(const char* name, int const& value)
 	{
 		glUniform1i(GetUniformLocation(name), value);
 	}
 
-	void Shader::SetFloat(const char* name, const float value)
+	void Shader::SetFloat(const char* name, float const& value)
 	{
 		glUniform1f(GetUniformLocation(name), value);
 	}
 
-	void Shader::SetVec2(const char* name, float x, float y)
+	void Shader::SetVec2(const char* name, float const& x, float const& y)
 	{
 		glUniform2f(GetUniformLocation(name), x, y);
 	}
 
-	void Shader::SetVec2(const char* name, glm::vec2 vector)
+	void Shader::SetVec2(const char* name, glm::vec2 const& vector)
 	{
 		glUniform2fv(GetUniformLocation(name), 1, &vector[0]);
 	}
 
-	void Shader::SetVec3(const char* name, float x, float y, float z)
+	void Shader::SetVec3(const char* name, float const& x, float const& y, float const& z)
 	{
 		glUniform3f(GetUniformLocation(name), x, y, z);
 	}
 
-	void Shader::SetVec3(const char* name, glm::vec3 vector)
+	void Shader::SetVec3(const char* name, glm::vec3 const& vector)
 	{
 		glUniform3fv(GetUniformLocation(name), 1, &vector[0]);
 	}
 
-	void Shader::SetVec4(const char* name, glm::vec4 vector)
+	void Shader::SetVec4(const char* name, glm::vec4 const& vector)
 	{
 		glUniform4fv(GetUniformLocation(name), 1, &vector[0]);
 	}
 
-	void Shader::SetVec4(const char* name, float x, float y, float z, float w)
+	void Shader::SetVec4(const char* name, float const& x, float const& y, float const& z, float const& w)
 	{
 		glUniform4f(GetUniformLocation(name), x, y, z, w);
 	}
 
-	void Shader::SetMat4(const char* name, glm::mat4 const matrix)
+	void Shader::SetMat4(const char* name, glm::mat4 const& matrix)
 	{
 		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
 	}

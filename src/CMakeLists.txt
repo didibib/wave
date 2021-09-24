@@ -22,8 +22,6 @@ set(WAVE_SOURCE_LIST
     "scene/mesh/vertex_buffer.cpp"    
     "scene/shader/shader.h"
     "scene/shader/shader.cpp"
-    "scene/shader/shader_manager.h"
-    "scene/shader/shader_manager.cpp"
     "scene/texture/texture.h"
     "scene/texture/texture_manager.h"
     "scene/texture/texture_manager.cpp" 
