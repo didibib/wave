@@ -1,9 +1,10 @@
 #pragma once
 
-#include "window.h"
-
 namespace Wave
 {
+	class Event;
+	class EventHandler;
+
 	class WindowGlfw : public Window
 	{
 	public:
@@ -14,7 +15,7 @@ namespace Wave
 		void Run() override;
 		void* GetNativeWindow() override { return m_GlfwWindow; }
 		float GetDeltaTime() { return m_DeltaTime; }
-		EventHandler GetInputHandler() { return m_InputHandler; }
+		EventHandler& GetEventHandler();
 	protected:
 		virtual void Update(float const& deltaTime) = 0;
 		virtual void Render(float const& deltaTime) = 0;
@@ -25,7 +26,7 @@ namespace Wave
 		float m_DeltaTime = 0;
 		float m_CurrentTime = 0, m_PreviousTime = 0;
 		GLFWwindow* m_GlfwWindow = nullptr;
-		EventHandler m_InputHandler;
+		std::unique_ptr<EventHandler> m_EventHandler;
 	private:
 		std::unique_ptr<ImGuiContext> m_ImGuiContext;
 	private:

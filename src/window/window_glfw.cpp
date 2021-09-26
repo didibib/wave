@@ -1,6 +1,8 @@
 #include "pch/wavepch.h"
-#include "event/event_handler.h"
 #include "imgui/imgui_context.h"
+#include "event/event.h"
+#include "event/event_handler.h"
+#include "window.h"
 #include "window_glfw.h"
 
 namespace Wave
@@ -42,6 +44,7 @@ namespace Wave
 
 		SetupCallbacks();
 
+		m_EventHandler = std::make_unique<EventHandler>();
 		m_ImGuiContext = std::make_unique<ImGuiContext>();
 		m_ImGuiContext->Init((Window*)this);
 	}
@@ -60,7 +63,7 @@ namespace Wave
 		{
 			UpdateTime();
 
-			m_InputHandler.Update(m_EventBuffer);
+			m_EventHandler->Update(m_EventBuffer);
 
 			m_ImGuiContext->Update();
 			Update(m_DeltaTime);
@@ -69,10 +72,15 @@ namespace Wave
 			Render(m_DeltaTime);
 			m_ImGuiContext->Render();
 
-			m_InputHandler.Flush();
+			m_EventHandler->Flush();
 			glfwSwapBuffers(m_GlfwWindow);
 			glfwPollEvents();
 		}
+	}
+
+
+	EventHandler& WindowGlfw::GetEventHandler() {
+		return *m_EventHandler; 
 	}
 
 	void WindowGlfw::Clear()

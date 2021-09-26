@@ -6,8 +6,8 @@ namespace Wave
 	{
 	public:
 		VertexBuffer();
-		void Create(std::vector<Vertex> const& vertices);
-		void Create(std::vector<Vertex> const& vertices, std::vector<uint> const& indices);
+		void Create(const std::vector<Vertex>& vertices);
+		void Create(const std::vector<Vertex>& vertices, const std::vector<uint>& indices);
 		void Draw() const;
 		void Bind() const;
 		void Unbind() const;

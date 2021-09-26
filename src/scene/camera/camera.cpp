@@ -3,7 +3,7 @@
 
 namespace Wave
 {
-	Camera::Camera(float const& fov, int const& viewWidth, int const& viewHeight, float const& near, float const& far)
+	Camera::Camera(const float& fov, const int& viewWidth, const int& viewHeight, const float& near, const float& far)
 		// Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector 
 		// pointing to the right so we initially rotate a bit to the left.
 		: m_Yaw(-90), m_Pitch(0),
@@ -13,7 +13,7 @@ namespace Wave
 		UpdateCameraVectors();
 	}
 
-	void Camera::Move(const Direction& dir, float const& deltaTime)
+	void Camera::Move(const Direction& dir, const float& deltaTime)
 	{
 		float velocity = m_MoveSpeed * deltaTime;
 		switch (dir)
@@ -57,7 +57,7 @@ namespace Wave
 		return glm::lookAt(m_Position, m_Position + m_Forward, m_Up);
 	}
 
-	void Camera::OnWindowResize(int const& width, int const& height)
+	void Camera::OnWindowResize(const int& width, const int& height)
 	{
 		if (width > 0 && height > 0)
 		{
@@ -77,7 +77,7 @@ namespace Wave
 		m_Forward = glm::normalize(forward);
 		// Also re-calculate the Right and Up vector
 		// normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-		m_Right = glm::normalize(glm::cross(m_Forward, m_WorldUp));  
+		m_Right = glm::normalize(glm::cross(m_Forward, m_WorldUp));
 		m_Up = glm::normalize(glm::cross(m_Right, m_Forward));
 	}
 }

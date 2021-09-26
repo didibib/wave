@@ -14,21 +14,21 @@ namespace Wave
 			return instance;
 		}
 	public:
-		std::optional<GLuint> Load(std::string const& filename, std::string const& key);
-		void Bind(std::string const& key, GLenum textureUnit);
+		std::optional<GLuint> Load(const std::string& filepath, std::string userKey = "");
+		void Bind(const std::string& key, GLenum textureUnit);
 		void Unbind();
 	private:
-		TextureManager();
+		TextureManager() {};
 	private:
 		std::string m_TextureDir;
 		std::unordered_map<std::string, Texture> m_TextureMap;
 	private:
-		void AddTexture(std::string const&, GLuint id, uint width, uint height);
-		void DeleteTexture(std::string const&);
+		void AddTexture(std::string key, Texture);
+		void DeleteTexture(const std::string&);
 	public:
 		// C++ 11, We can use the better technique of deleting the methods we don't want.
-		TextureManager(TextureManager const&) = delete;
-		void operator=(TextureManager const&) = delete;
+		TextureManager(const TextureManager&) = delete;
+		void operator=(const TextureManager&) = delete;
 		// Note: Scott Meyers mentions in his Effective Modern
 		//       C++ book, that deleted functions should generally
 		//       be public as it results in better error messages

@@ -4,17 +4,17 @@
 namespace Wave
 {
 	VertexBuffer::VertexBuffer() :
-		m_IsBind(false), m_nVertices(0), m_nIndices(0), 
+		m_IsBind(false), m_nVertices(0), m_nIndices(0),
 		m_VAO(0), m_VBO(0), m_EBO(0)
 	{
 	}
 
-	void VertexBuffer::Create(std::vector<Vertex> const& vertices)
+	void VertexBuffer::Create(const std::vector<Vertex>& vertices)
 	{
 		Create(vertices, std::vector<uint>());
 	}
 
-	void VertexBuffer::Create(std::vector<Vertex> const& vertices, std::vector<uint> const& indices)
+	void VertexBuffer::Create(const std::vector<Vertex>& vertices, const std::vector<uint>& indices)
 	{
 		m_nVertices = vertices.size();
 		m_nIndices = indices.size();
@@ -24,14 +24,15 @@ namespace Wave
 		// Generate buffers
 		glGenVertexArrays(1, &m_VAO);
 		glGenBuffers(1, &m_VBO);
-		// Bind buffers
+		// Bind VAO
 		glBindVertexArray(m_VAO);
-
+		// Bind VBO
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_nVertices, &vertices[0], GL_STATIC_DRAW);
 
 		if (!indices.empty())
 		{
+			// Bind EBO
 			TRACE("Generating EBO");
 			glGenBuffers(1, &m_EBO);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);

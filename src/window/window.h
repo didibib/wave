@@ -7,9 +7,9 @@ namespace Wave
 	public:
 		Window(int width, int height, const char* title) {
 			Log::Init();
-			mWidth = width;
-			mHeight = height;
-			mTitle = title;
+			m_Width = width;
+			m_Height = height;
+			m_Title = title;
 		}
 		~Window()
 		{
@@ -19,12 +19,12 @@ namespace Wave
 		virtual void Run() = 0;
 		virtual void* GetNativeWindow() = 0;
 	public:
-		int GetWidth() { return mWidth; }
-		int GetHeight() { return mHeight; }
-		std::string GetTitle() { return mTitle; }
+		int GetWidth() { return m_Width; }
+		int GetHeight() { return m_Height; }
+		std::string GetTitle() { return m_Title; }
 	protected:
-		int mWidth;
-		int mHeight;
-		std::string mTitle;
+		int m_Width;
+		int m_Height;
+		std::string m_Title;
 	};
 }

@@ -3,38 +3,27 @@
 
 namespace Wave
 {
-	TextureManager::TextureManager()
+	std::optional<GLuint> TextureManager::Load(const std::string& filepath, std::string userKey)
 	{
-		const char* c_assets_dir = TOSTRING(ASSETS_DIR);
-		std::string assets_dir(c_assets_dir);
-		m_TextureDir = assets_dir + "/textures/";
-		TRACE("Texture manager constructed");
-	}
-
-	std::optional<GLuint> TextureManager::Load(std::string const& filename, std::string const& key)
-	{
-		// wave_asset_dir is defined in wavepch.h
-		std::string filepath = m_TextureDir + filename;
-
-		const char* c_filepath = filepath.c_str();
-		TRACE("Loading image: {}", c_filepath);
+		const char* filepath_c = filepath.c_str();
+		TRACE("Loading image: {}", filepath_c);
 
 		FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-		fif = FreeImage_GetFileType(c_filepath);
+		fif = FreeImage_GetFileType(filepath_c);
 		if (fif == FIF_UNKNOWN)
 		{
-			fif = FreeImage_GetFIFFromFilename(c_filepath);
+			fif = FreeImage_GetFIFFromFilename(filepath_c);
 		}
 		if (fif == FIF_UNKNOWN)
 		{
-			ERROR("Failed to get filetype: {}", c_filepath);
+			ERROR("Failed to get filetype: {}", filepath_c);
 			return false;
 		}
 
-		FIBITMAP* dib = FreeImage_Load(fif, c_filepath);
+		FIBITMAP* dib = FreeImage_Load(fif, filepath_c);
 		if (!dib)
 		{
-			ERROR("Image failed to load: {}", c_filepath);
+			ERROR("Image failed to load: {}", filepath_c);
 			return false;
 		}
 
@@ -42,7 +31,7 @@ namespace Wave
 		uint width = FreeImage_GetWidth(dib);
 		uint height = FreeImage_GetHeight(dib);
 
-		TRACE("{} : [width:{}][height:{}]", c_filepath, width, height);
+		TRACE("{} : [width:{}][height:{}]", filepath_c, width, height);
 		if (bits == 0 || width == 0 || height == 0)
 		{
 			return false;
@@ -51,7 +40,7 @@ namespace Wave
 		auto format = GetFormat(fif);
 		if (!format)
 		{
-			ERROR("Unknown GL format: {}", c_filepath);
+			ERROR("Unknown GL format: {}", filepath_c);
 			return false;
 		}
 
@@ -72,12 +61,17 @@ namespace Wave
 
 		FreeImage_Unload(dib);
 
-		AddTexture(key, id, width, height);
+		std::string key = filepath;
+		if (userKey != "")
+		{
+			key = userKey;
+		}		
+		AddTexture(key, { id, filepath, width, height });
 
 		return id;
 	}
 
-	void TextureManager::Bind(std::string const& key, GLenum textureUnit)
+	void TextureManager::Bind(const std::string& key, GLenum textureUnit)
 	{
 		auto it = m_TextureMap.find(key);
 		if (it != m_TextureMap.end())
@@ -93,19 +87,20 @@ namespace Wave
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void TextureManager::AddTexture(std::string const& key, GLuint id, uint width, uint height)
+	void TextureManager::AddTexture(std::string key, Texture texture)
 	{
-		auto pair = std::pair<std::string, Texture>(key, { id, width, height });
+		auto pair = std::pair<std::string, Texture>(key, texture);
 		m_TextureMap.insert(pair);
 		TRACE("Added texture: {}", key);
 	}
 
-	void TextureManager::DeleteTexture(std::string const& key)
+	void TextureManager::DeleteTexture(const std::string& key)
 	{
 		auto it = m_TextureMap.find(key);
 		if (it != m_TextureMap.end())
 		{
 			m_TextureMap.erase(it);
+			TRACE("Deleted texture: {}", key);
 		}
 	}
 

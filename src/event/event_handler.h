@@ -1,29 +1,31 @@
 #pragma once
 
-#include "event.h"
-
 namespace Wave
 {
+	class Event;
+	class Cursor;
+	class Scroll;
+
 	class EventHandler
 	{
 	public:
-		EventHandler() = default;
+		EventHandler();
 		void Update(std::queue<std::unique_ptr<Event>>& eventBuffer);
 		void Flush();
 
-		Cursor& GetCursor() { return m_Cursor; }
-		Scroll GetScroll() { return m_Scroll; }
+		Cursor& GetCursor();
+		Scroll& GetScroll();
 
-		bool IsKeyPressed(int const& key);
-		bool IsKeyRepeat(int const& key);
-		bool IsKeyReleased(int const& key);
+		bool IsKeyPressed(const int& key);
+		bool IsKeyRepeat(const int& key);
+		bool IsKeyReleased(const int& key);
 
-		bool IsMousePressed(int const& button);
-		bool IsMouseRepeat(int const& button);
-		bool IsMouseReleased(int const& button);
+		bool IsMousePressed(const int& button);
+		bool IsMouseRepeat(const int& button);
+		bool IsMouseReleased(const int& button);
 	private:
-		Cursor m_Cursor;
-		Scroll m_Scroll;
+		std::unique_ptr<Cursor> m_Cursor;
+		std::unique_ptr<Scroll> m_Scroll;
 		std::map<int, int> m_KeyStates;
 		std::map<int, int> m_MouseStates;
 	};

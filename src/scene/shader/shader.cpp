@@ -12,19 +12,15 @@ namespace Wave
 		glDeleteProgram(m_ProgramId);
 	}
 
-	bool Shader::Load(std::string const& filename)
+	bool Shader::Load(const std::string& filepath)
 	{
-		const char* c_assets_dir = TOSTRING(ASSETS_DIR);
-		std::string assets_dir(c_assets_dir);
-		std::string shader_dir = assets_dir + "/shaders/";
+		std::string vert_file_loc = filepath + ".vert";
+		std::string vert_shader = String::GetFileContents(vert_file_loc.c_str());
 
-		std::string vert_file_loc = shader_dir + filename + ".vert";
-		std::string vert_shader = String::get_file_contents(vert_file_loc.c_str());
+		std::string frag_file_loc = filepath + ".frag";
+		std::string frag_shader = String::GetFileContents(frag_file_loc.c_str());
 
-		std::string frag_file_loc = shader_dir + filename + ".frag";
-		std::string frag_shader = String::get_file_contents(frag_file_loc.c_str());
-
-		TRACE("Loading Shader: {} -> {}, {}", filename, vert_file_loc, frag_file_loc);
+		TRACE("Loading Shader: {} -> {}, {}", filepath, vert_file_loc, frag_file_loc);
 
 		GLuint vert_id = CompileShader(GL_VERTEX_SHADER, vert_shader);
 		GLuint frag_id = CompileShader(GL_FRAGMENT_SHADER, frag_shader);
@@ -39,7 +35,7 @@ namespace Wave
 		return true;
 	}
 
-	GLuint Shader::CompileShader(GLenum shader_type, std::string const& file)
+	GLuint Shader::CompileShader(GLenum shader_type, const std::string& file) const
 	{
 		GLuint shader_id = glCreateShader(shader_type);
 
@@ -112,17 +108,17 @@ namespace Wave
 		glDeleteShader(frag_id);
 	}
 
-	void Shader::Begin()
+	void Shader::Begin() const
 	{
 		glUseProgram(m_ProgramId);
 	}
 
-	void Shader::End()
+	void Shader::End() const
 	{
 		glUseProgram(0);
 	}
 
-	GLuint Shader::GetUniformLocation(std::string const& name)
+	GLuint Shader::GetUniformLocation(const std::string& name) const
 	{
 		GLuint location = glGetUniformLocation(m_ProgramId, name.c_str());
 		if (location == GL_INVALID_INDEX)
@@ -132,47 +128,47 @@ namespace Wave
 		return location;
 	}
 
-	void Shader::SetInt(const char* name, int const& value)
+	void Shader::SetInt(const char* name, const int& value) const
 	{
 		glUniform1i(GetUniformLocation(name), value);
 	}
 
-	void Shader::SetFloat(const char* name, float const& value)
+	void Shader::SetFloat(const char* name, const float& value) const
 	{
 		glUniform1f(GetUniformLocation(name), value);
 	}
 
-	void Shader::SetVec2(const char* name, float const& x, float const& y)
+	void Shader::SetVec2(const char* name, const float& x, const float& y) const
 	{
 		glUniform2f(GetUniformLocation(name), x, y);
 	}
 
-	void Shader::SetVec2(const char* name, glm::vec2 const& vector)
+	void Shader::SetVec2(const char* name, const glm::vec2& vector) const
 	{
 		glUniform2fv(GetUniformLocation(name), 1, &vector[0]);
 	}
 
-	void Shader::SetVec3(const char* name, float const& x, float const& y, float const& z)
+	void Shader::SetVec3(const char* name, const float& x, const float& y, const float& z) const
 	{
 		glUniform3f(GetUniformLocation(name), x, y, z);
 	}
 
-	void Shader::SetVec3(const char* name, glm::vec3 const& vector)
+	void Shader::SetVec3(const char* name, const glm::vec3& vector) const
 	{
 		glUniform3fv(GetUniformLocation(name), 1, &vector[0]);
 	}
 
-	void Shader::SetVec4(const char* name, glm::vec4 const& vector)
+	void Shader::SetVec4(const char* name, const glm::vec4& vector) const
 	{
 		glUniform4fv(GetUniformLocation(name), 1, &vector[0]);
 	}
 
-	void Shader::SetVec4(const char* name, float const& x, float const& y, float const& z, float const& w)
+	void Shader::SetVec4(const char* name, const float& x, const float& y, const float& z, const float& w) const
 	{
 		glUniform4f(GetUniformLocation(name), x, y, z, w);
 	}
 
-	void Shader::SetMat4(const char* name, glm::mat4 const& matrix)
+	void Shader::SetMat4(const char* name, const glm::mat4& matrix) const
 	{
 		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
 	}

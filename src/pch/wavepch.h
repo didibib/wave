@@ -32,12 +32,6 @@
 #include "scene/mesh/vertex.h"
 #include "scene/texture/texture.h"
 
-namespace Wave
-{
-	// Order of these enum is important
-	enum class Direction { Forward, Right, Up, Backward, Left, Down };
-}
-
 #ifndef WAVE_OPENGL_VERSION
 #define WAVE_OPENGL_VERSION 410
 #endif // !WAVE_OPENGL_VERSION

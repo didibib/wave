@@ -1,8 +1,14 @@
 #include "pch/wavepch.h"
+#include "event.h"
 #include "event_handler.h"
 
 namespace Wave
 {
+	EventHandler::EventHandler()
+	{
+		m_Cursor = std::make_unique<Cursor>();
+		m_Scroll = std::make_unique<Scroll>();
+	}
 	void EventHandler::Update(std::queue<std::unique_ptr<Event>>& eventBuffer)
 	{
 		while (!eventBuffer.empty())
@@ -27,25 +33,25 @@ namespace Wave
 			case Event::Type::Cursor:
 			{
 				auto cursorEvent = static_cast<CursorEvent*>(event.get());
-				m_Cursor.Translate(cursorEvent->GetXPos(), cursorEvent->GetYPos());
+				m_Cursor->Translate(cursorEvent->GetXPos(), cursorEvent->GetYPos());
 			}
 			break;
 			case Event::Type::Scroll:
 			{
 				ScrollEvent* scrollEvent = static_cast<ScrollEvent*>(event.get());
-				m_Scroll.Set(scrollEvent->GetXOffset(), scrollEvent->GetYOffset());
+				m_Scroll->Set(scrollEvent->GetXOffset(), scrollEvent->GetYOffset());
 			}
 			break;
 			case Event::Type::CursorEnter:
 			{
 				auto cursorEnterEvent = static_cast<CursorEnterEvent*>(event.get());
-				m_Cursor.SetState(cursorEnterEvent->IsEntered());
+				m_Cursor->SetState(cursorEnterEvent->IsEntered());
 			}
 			break;
 			case Event::Type::WindowFocus:
 			{
 				auto windowFocusEvent = static_cast<WindowFocusEvent*>(event.get());
-				m_Cursor.SetState(windowFocusEvent->IsFocused());
+				m_Cursor->SetState(windowFocusEvent->IsFocused());
 			}
 			break;
 			}
@@ -54,36 +60,43 @@ namespace Wave
 
 	void EventHandler::Flush()
 	{
-		m_Cursor.Flush();
-		m_Scroll.Flush();
+		m_Cursor->Flush();
+		m_Scroll->Flush();
 	}
 
-	bool EventHandler::IsKeyPressed(int const& key)
+	Cursor& EventHandler::GetCursor() {
+		return *m_Cursor; 
+	}
+	Scroll& EventHandler::GetScroll() {
+		return *m_Scroll; 
+	}
+
+	bool EventHandler::IsKeyPressed(const int& key)
 	{
 		return m_KeyStates[key] == GLFW_PRESS;
 	}
 
-	bool EventHandler::IsKeyRepeat(int const& key)
+	bool EventHandler::IsKeyRepeat(const int& key)
 	{
 		return m_KeyStates[key] == GLFW_PRESS || m_KeyStates[key] == GLFW_REPEAT;
 	}
 
-	bool EventHandler::IsKeyReleased(int const& key)
+	bool EventHandler::IsKeyReleased(const int& key)
 	{
 		return m_KeyStates[key] == GLFW_RELEASE;
 	}
 
-	bool EventHandler::IsMousePressed(int const& button)
+	bool EventHandler::IsMousePressed(const int& button)
 	{
 		return m_MouseStates[button] == GLFW_PRESS;
 	}
 
-	bool EventHandler::IsMouseRepeat(int const& button)
+	bool EventHandler::IsMouseRepeat(const int& button)
 	{
 		return m_MouseStates[button] == GLFW_PRESS || m_MouseStates[button] == GLFW_REPEAT;
 	}
 
-	bool EventHandler::IsMouseReleased(int const& button)
+	bool EventHandler::IsMouseReleased(const int& button)
 	{
 		return m_MouseStates[button] == GLFW_RELEASE;
 	}

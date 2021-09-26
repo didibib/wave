@@ -3,14 +3,18 @@
 
 namespace Sandbox
 {
-	App::App(int const& width, int const& height, const char* title) : Wave::WindowGlfw(width, height, title)
+	App::App(const int& width, const int& height, const char* title) 
+		: Wave::WindowGlfw(width, height, title)
 	{
 		auto& tm = Wave::TextureManager::GetInstance();
-		tm.Load("container_diffuse.png", "container_diffuse");
-		tm.Load("container_specular.png", "container_specular");
-		tm.Load("matrix.jpg", "matrix");
+		
+		std::string texDir = Wave::Asset::GetDirectory() + "/textures/";
+		tm.Load(texDir + "container_diffuse.png", "c_diff");
+		tm.Load(texDir + "container_specular.png", "c_spec");
+		tm.Load(texDir + "matrix.jpg", "matrix");
 
-		m_Shader.Load("phong");
+		auto shaderDir = Wave::Asset::GetDirectory() + "/shaders/";
+		m_Shader.Load(shaderDir + "phong");
 		m_Shader.Begin();
 		m_Shader.SetInt("u_Material.diffuse", 0);
 		m_Shader.SetInt("u_Material.specular", 1);
@@ -19,13 +23,14 @@ namespace Sandbox
 		m_Shader.End();
 
 		m_Vb.Create(Wave::Cube::GetVertices());
-		m_Camera = new Wave::Camera(60, Window::GetWidth(), Window::GetHeight(), 0.1f, 1000.f);
+		m_Camera = std::make_unique<Wave::Camera>(60, Window::GetWidth(), Window::GetHeight(), 0.1f, 1000.f);
 		m_Camera->SetPos({ 0, 0, 3 });
 		m_Light.SetPos({ 0.f, 3.f, 0.f });
 	}
-	void App::Update(float const& deltaTime)
+
+	void App::Update(const float& deltaTime)
 	{
-		auto inputHandler = GetInputHandler();
+		Wave::EventHandler& inputHandler = GetEventHandler();
 		if (inputHandler.IsMouseRepeat(GLFW_MOUSE_BUTTON_2))
 		{
 			if (inputHandler.IsKeyRepeat(GLFW_KEY_W)) m_Camera->Move(Wave::Direction::Forward, deltaTime);
@@ -39,7 +44,7 @@ namespace Sandbox
 		}
 	}
 
-	void App::Render(float const& deltaTime)
+	void App::Render(const float& deltaTime)
 	{
 		glm::vec3 cubePositions[] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
@@ -102,11 +107,10 @@ namespace Sandbox
 		// Render boxes
 		auto& tm = Wave::TextureManager::GetInstance();
 
-		tm.Bind("container_diffuse", GL_TEXTURE0);
-		tm.Bind("container_specular", GL_TEXTURE1);
+		tm.Bind("c_diff", GL_TEXTURE0);
+		tm.Bind("c_spec", GL_TEXTURE1);
 		tm.Bind("matrix", GL_TEXTURE2);
 
-		m_Vb.Bind();
 		for (unsigned int i = 0; i < 10; i++)
 		{
 			// Calculate the model matrix for each object and pass it to shader before drawing
@@ -119,6 +123,7 @@ namespace Sandbox
 			m_Shader.SetMat4("u_Model", model);
 			m_Shader.SetMat4("u_NormalMatrix", normalMatrix);
 
+			m_Vb.Bind();
 			m_Vb.Draw();
 		}
 		m_Shader.End();

@@ -6,8 +6,8 @@ namespace Wave
 {
 	struct Texture
 	{
-		enum class Type { Diffuse, Specular, Height };
 		GLuint Id = 0;
+		std::string Type;
 		uint Width = 0;
 		uint Height = 0;
 	};
