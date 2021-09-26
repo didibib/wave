@@ -3,8 +3,14 @@
 
 namespace Wave
 {
-	std::optional<GLuint> TextureManager::Load(const std::string& filepath, std::string userKey)
+	std::optional<std::string> TextureManager::Load(const std::string& filepath, std::string userKey)
 	{
+		auto it = m_TextureMap.find(filepath);
+		if (it != m_TextureMap.end())
+		{
+			return filepath;
+		}
+
 		const char* filepath_c = filepath.c_str();
 		TRACE("Loading image: {}", filepath_c);
 
@@ -17,14 +23,14 @@ namespace Wave
 		if (fif == FIF_UNKNOWN)
 		{
 			ERROR("Failed to get filetype: {}", filepath_c);
-			return false;
+			return {};
 		}
 
 		FIBITMAP* dib = FreeImage_Load(fif, filepath_c);
 		if (!dib)
 		{
 			ERROR("Image failed to load: {}", filepath_c);
-			return false;
+			return {};
 		}
 
 		byte* bits = FreeImage_GetBits(dib);
@@ -34,14 +40,14 @@ namespace Wave
 		TRACE("{} : [width:{}][height:{}]", filepath_c, width, height);
 		if (bits == 0 || width == 0 || height == 0)
 		{
-			return false;
+			return {};
 		}
 
 		auto format = GetFormat(fif);
 		if (!format)
 		{
 			ERROR("Unknown GL format: {}", filepath_c);
-			return false;
+			return {};
 		}
 
 		uint id;
@@ -49,18 +55,19 @@ namespace Wave
 		if (id == 0)
 		{
 			ERROR("Failed to generate texture id");
-			return false;
+			return {};
 		}
 		glBindTexture(GL_TEXTURE_2D, id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, (*format).internal, width, height, 0, (*format).system, GL_UNSIGNED_BYTE, bits);
+		glTexImage2D(GL_TEXTURE_2D, 0, format.value().internal, width, height, 0, format.value().system, GL_UNSIGNED_BYTE, bits);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		FreeImage_Unload(dib);
 
+		// TODO: Remove this check when userKey is removed
 		std::string key = filepath;
 		if (userKey != "")
 		{
@@ -68,7 +75,7 @@ namespace Wave
 		}		
 		AddTexture(key, { id, filepath, width, height });
 
-		return id;
+		return filepath;
 	}
 
 	void TextureManager::Bind(const std::string& key, GLenum textureUnit)

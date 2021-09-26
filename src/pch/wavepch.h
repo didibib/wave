@@ -1,6 +1,6 @@
 #pragma once
 
-// C++ headers
+// STD headers
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -20,12 +20,16 @@
 #ifdef _WIN32
 #include "GLFW/glfw3native.h"
 #endif
-
+// GLM
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/fast_square_root.hpp"
-
+// FreeImage
 #include "FreeImage.h"
+// Assimp
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 // Utility
 #include "util/log.h"
 #include "util/util.h"

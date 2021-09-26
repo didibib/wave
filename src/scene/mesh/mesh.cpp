@@ -5,16 +5,15 @@
 
 namespace Wave
 {
-	Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<Texture>&& textures)
-		: m_Vertices{ std::move(vertices) }, m_Indices{}, m_Textures{ std::move(textures) }
-	{
-		m_VertexBuffer.Create(m_Vertices);
-	}
-
-	Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<uint>&& indices, std::vector<Texture>&& textures)
+	Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<Texture>&& textures, std::vector<uint>&& indices)
 		: m_Vertices{ std::move(vertices) }, m_Indices{ std::move(indices) }, m_Textures{ std::move(textures) }
 	{
-		m_VertexBuffer.Create(m_Vertices, m_Indices);
+		m_VertexBuffer = std::make_unique<VertexBuffer>();
+		m_VertexBuffer->Create(m_Vertices, m_Indices);
+	}
+
+	Mesh::~Mesh()
+	{
 	}
 
 	void Mesh::Draw(const Shader& shader) const
@@ -32,9 +31,8 @@ namespace Wave
 			glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
 			glBindTexture(GL_TEXTURE_2D, m_Textures[i].Id);
         }
-
-		m_VertexBuffer.Bind();
-		m_VertexBuffer.Draw();
-		m_VertexBuffer.Unbind();
+		m_VertexBuffer->Bind();
+		m_VertexBuffer->Draw();
+		m_VertexBuffer->Unbind();
 	}
 }

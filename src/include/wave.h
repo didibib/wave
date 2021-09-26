@@ -18,3 +18,4 @@
 #include "scene/mesh/cube.h"
 #include "scene/mesh/mesh.h"
 #include "scene/light/light.h"
+#include "scene/model/model.h"

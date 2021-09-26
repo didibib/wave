@@ -14,7 +14,8 @@ namespace Wave
 			return instance;
 		}
 	public:
-		std::optional<GLuint> Load(const std::string& filepath, std::string userKey = "");
+		// TODO: Remove userKey 
+		std::optional<std::string> Load(const std::string& filepath, std::string userKey = "");
 		void Bind(const std::string& key, GLenum textureUnit);
 		void Unbind();
 	private:
