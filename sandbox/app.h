@@ -14,6 +14,7 @@ namespace Sandbox
 		std::unique_ptr<Wave::Camera> m_Camera;
 		Wave::Shader m_Shader;
 		Wave::VertexBuffer m_Vb;
+		Wave::Model m_Model;
 		Wave::Light m_Light;
 	};
 }

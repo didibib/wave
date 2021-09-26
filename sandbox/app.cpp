@@ -22,7 +22,10 @@ namespace Sandbox
 		m_Shader.SetFloat("u_Material.shininess", 32.0f);
 		m_Shader.End();
 
+		auto modelDir = Wave::Asset::GetDirectory() + "/models/";
+		m_Model.Load(modelDir + "/backpack/backpack.obj");
 		m_Vb.Create(Wave::Cube::GetVertices());
+
 		m_Camera = std::make_unique<Wave::Camera>(60, Window::GetWidth(), Window::GetHeight(), 0.1f, 1000.f);
 		m_Camera->SetPos({ 0, 0, 3 });
 		m_Light.SetPos({ 0.f, 3.f, 0.f });
@@ -46,6 +49,8 @@ namespace Sandbox
 
 	void App::Render(const float& deltaTime)
 	{
+
+
 		glm::vec3 cubePositions[] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
 			glm::vec3(2.0f,  5.0f, -15.0f),
@@ -103,6 +108,8 @@ namespace Sandbox
 		m_Shader.SetMat4("u_Projection", m_Camera->GetProjMatrix());
 		m_Shader.SetMat4("u_View", m_Camera->GetViewMatrix());
 		m_Shader.SetVec3("u_ViewPosition", m_Camera->GetPos());
+
+		m_Model.Draw(m_Shader);
 
 		// Render boxes
 		auto& tm = Wave::TextureManager::GetInstance();
