@@ -31,16 +31,6 @@ target_include_directories(sandbox
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# set(SANDBOX_ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
-# set(SANDBOX_ASSETS_DEST $<TARGET_FILE_DIR:sandbox>/assets)
-# # Copy the assets folder to the executable folder
-# add_custom_command(TARGET sandbox POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory
-#     ${SANDBOX_ASSETS_DIR}
-#     ${SANDBOX_ASSETS_DEST}
-#     COMMENT "Copying assets from ${SANDBOX_ASSETS_DIR} to ${SANDBOX_ASSETS_DEST}"
-# )
-
 set(FREE_IMAGE_DEST $<TARGET_FILE_DIR:sandbox>/FreeImage.dll)
 # Copy the FreeImage.dll to the executable
 add_custom_command(TARGET sandbox POST_BUILD

@@ -58,8 +58,8 @@ namespace Wave
 	{
 		inline std::string GetDirectory()
 		{
-			// ASSET_DIR is during cmake building in src/CMakeLists.txt
-			static std::string assetDir = TOSTRING(ASSETS_DIR);
+			// WAVE_ASSETS_DIR is set during cmake building in wave/CMakeLists.txt
+			static std::string assetDir = TOSTRING(WAVE_ASSETS_DIR);
 			return assetDir;
 		}
 	}

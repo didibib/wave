@@ -53,7 +53,7 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${WAVE_SOURCE_LIST})
 
 # Add macro specifying assets directory
 # ${ASSETS_DRI} is set in the root 
-target_compile_definitions(wave PUBLIC ASSETS_DIR=${ASSETS_DIR})
+target_compile_definitions(wave PUBLIC WAVE_ASSETS_DIR=${WAVE_ASSETS_DIR})
 
 # Set output directories    
 set_target_output_directories(wave)

@@ -6,8 +6,8 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
 endif()
 
 # Define paths
-set(VENDOR_DIR "${CMAKE_SOURCE_DIR}/vendor")
-set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
+set(WAVE_VENDOR_DIR "${CMAKE_SOURCE_DIR}/vendor")
+set(WAVE_ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 
 # Include cmake modules
 include(cmake/update_submodules.cmake)
@@ -34,33 +34,33 @@ update_submodules()
 
 # Start building
 message(STATUS "Adding subdirectory 'glad'")
-add_subdirectory(${VENDOR_DIR}/glad)
+add_subdirectory(${WAVE_VENDOR_DIR}/glad)
 
 message(STATUS "Adding subdirectory 'imgui'")
-add_subdirectory(${VENDOR_DIR}/imgui)
+add_subdirectory(${WAVE_VENDOR_DIR}/imgui)
 
 message(STATUS "Adding subdirectory 'glfw'")
 set(GLFW_BUILD_DOCS OFF)
-add_subdirectory(${VENDOR_DIR}/glfw)
+add_subdirectory(${WAVE_VENDOR_DIR}/glfw)
 
 message(STATUS "Adding subdirectory 'glm'")
-add_subdirectory(${VENDOR_DIR}/glm)
+add_subdirectory(${WAVE_VENDOR_DIR}/glm)
 
 message(STATUS "Adding subdirectory 'spdlog'")
-add_subdirectory(${VENDOR_DIR}/spdlog)
+add_subdirectory(${WAVE_VENDOR_DIR}/spdlog)
 
 message(STATUS "Adding subdirectory 'assimp'")
 # We want to link assimp statically, otherwise we have to copy the dll to the .exe
 set(BUILD_SHARED_LIBS OFF)
 set(ASSIMP_BUILD_TESTS OFF)
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF) 
-add_subdirectory(${VENDOR_DIR}/assimp)
+add_subdirectory(${WAVE_VENDOR_DIR}/assimp)
 
 message(STATUS "Setting FreeImage variables")
 # We use these variables for 'wave' project
-set(FREE_IMAGE_INCLUDE  ${VENDOR_DIR}/freeimage/include)
-set(FREE_IMAGE_DLL      ${VENDOR_DIR}/freeimage/FreeImage.dll)
-set(FREE_IMAGE_LIB      ${VENDOR_DIR}/freeimage/FreeImage.lib)
+set(FREE_IMAGE_INCLUDE  ${WAVE_VENDOR_DIR}/freeimage/include)
+set(FREE_IMAGE_DLL      ${WAVE_VENDOR_DIR}/freeimage/FreeImage.dll)
+set(FREE_IMAGE_LIB      ${WAVE_VENDOR_DIR}/freeimage/FreeImage.lib)
 
 message(STATUS "Adding subdirectory 'src'")
 add_subdirectory(src)
