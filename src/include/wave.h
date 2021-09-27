@@ -14,6 +14,7 @@
 #include "scene/shader/shader.h"
 #include "scene/texture/texture.h"
 #include "scene/texture/texture_manager.h"
+#include "scene/object/object.h"
 #include "scene/camera/camera.h"
 #include "scene/mesh/cube.h"
 #include "scene/mesh/mesh.h"

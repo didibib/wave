@@ -1,4 +1,5 @@
 #include "pch/wavepch.h"
+#include "scene/object/object.h"
 #include "camera.h"
 
 namespace Wave
@@ -6,11 +7,43 @@ namespace Wave
 	Camera::Camera(const float& fov, const int& viewWidth, const int& viewHeight, const float& near, const float& far)
 		// Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector 
 		// pointing to the right so we initially rotate a bit to the left.
-		: m_Yaw(-90), m_Pitch(0),
-		m_Fov(fov), m_ViewWidth(viewWidth), m_ViewHeight(viewHeight), m_Near(near), m_Far(far)
+		: m_Yaw(-90), m_Pitch(0), m_Fov(fov), m_ViewWidth(viewWidth), m_ViewHeight(viewHeight), m_Near(near), m_Far(far),
+		m_Forward(0.f, 0.f, -1.f), m_Up(0.f, 1.f, 0.f), m_Right(1.f, 0.f, 0.f), m_WorldUp(0.f, 1.f, 0.f)
 	{
 		m_Projection = glm::perspective(glm::radians(m_Fov), (float)m_ViewWidth / (float)m_ViewHeight, m_Near, m_Far);
 		UpdateCameraVectors();
+	}
+
+	glm::vec3 Camera::GetPos()
+	{
+		return glm::vec3();
+	}
+
+	void Camera::SetPos(glm::vec3 const& pos) 
+	{ 
+		m_Position = pos;
+	}
+
+	void Camera::SetPos(float const& x, float const& y, float const& z)
+	{
+		m_Position.x = x;
+		m_Position.y = y;
+		m_Position.z = z;
+	}
+
+	glm::mat4 Camera::GetProjMatrix()
+	{
+		return m_Projection;
+	}
+
+	glm::mat4 Camera::GetViewMatrix()
+	{
+		return glm::lookAt(m_Position, m_Position + m_Forward, m_Up);
+	}
+
+	glm::vec3 Camera::GetForward()
+	{
+		return m_Forward;
 	}
 
 	void Camera::Move(const Direction& dir, const float& deltaTime)
@@ -50,11 +83,6 @@ namespace Wave
 		// Make sure that when pitch is out of bounds, screen doesn't get flipped
 		m_Pitch = glm::clamp(m_Pitch, -89.f, 89.f);
 		UpdateCameraVectors();
-	}
-
-	glm::mat4 Camera::GetViewMatrix()
-	{
-		return glm::lookAt(m_Position, m_Position + m_Forward, m_Up);
 	}
 
 	void Camera::OnWindowResize(const int& width, const int& height)

@@ -4,10 +4,15 @@
 namespace Wave
 {
 	Object::Object() :
-		m_Position(0.f, 0.f, 0.f), m_Forward(0.f, 0.f, -1.f), m_Up(0.f, 1.f, 0.f), m_Right(1.f, 0.f, 0.f), 
-		m_WorldUp(0.f, 1.f, 0.f), m_Model(1.f)
+		m_Position(0.f, 0.f, 0.f), m_WorldUp(0.f, 1.f, 0.f), m_Model(1.f)
 	{
 	}
+
+	glm::vec3 Object::GetPos()
+	{
+		return m_Position;
+	}
+
 
 	void Object::SetPos(glm::vec3 const& pos)
 	{
@@ -19,6 +24,16 @@ namespace Wave
 		m_Position.x = x;
 		m_Position.y = y;
 		m_Position.z = z;
+	}
+
+	void Object::Translate(glm::vec3 translation)
+	{
+		m_Model = glm::translate(m_Model, translation);
+	}
+
+	void Object::Rotate(float angleInRadians, glm::vec3 axis)
+	{
+		m_Model = glm::rotate(m_Model, angleInRadians, axis);
 	}
 }
 
