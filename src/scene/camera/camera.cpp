@@ -14,38 +14,6 @@ namespace Wave
 		UpdateCameraVectors();
 	}
 
-	glm::vec3 Camera::GetPos()
-	{
-		return glm::vec3();
-	}
-
-	void Camera::SetPos(glm::vec3 const& pos) 
-	{ 
-		m_Position = pos;
-	}
-
-	void Camera::SetPos(float const& x, float const& y, float const& z)
-	{
-		m_Position.x = x;
-		m_Position.y = y;
-		m_Position.z = z;
-	}
-
-	glm::mat4 Camera::GetProjMatrix()
-	{
-		return m_Projection;
-	}
-
-	glm::mat4 Camera::GetViewMatrix()
-	{
-		return glm::lookAt(m_Position, m_Position + m_Forward, m_Up);
-	}
-
-	glm::vec3 Camera::GetForward()
-	{
-		return m_Forward;
-	}
-
 	void Camera::Move(const Direction& dir, const float& deltaTime)
 	{
 		float velocity = m_MoveSpeed * deltaTime;
@@ -93,6 +61,38 @@ namespace Wave
 			m_ViewHeight = height;
 			m_Projection = glm::perspective(glm::radians(m_Fov), (float)m_ViewWidth / (float)m_ViewHeight, m_Near, m_Far);
 		}
+	}
+
+	const glm::vec3& Camera::GetPos()
+	{
+		return m_Position;
+	}
+
+	void Camera::SetPos(glm::vec3 const& pos)
+	{
+		m_Position = pos;
+	}
+
+	void Camera::SetPos(float const& x, float const& y, float const& z)
+	{
+		m_Position.x = x;
+		m_Position.y = y;
+		m_Position.z = z;
+	}
+
+	const glm::mat4& Camera::GetProjMatrix()
+	{
+		return m_Projection;
+	}
+
+	glm::mat4 Camera::GetViewMatrix()
+	{
+		return glm::lookAt(m_Position, m_Position + m_Forward, m_Up);
+	}
+
+	const glm::vec3& Camera::GetForward()
+	{
+		return m_Forward;
 	}
 
 	void Camera::UpdateCameraVectors()

@@ -3,12 +3,13 @@
 
 namespace Wave
 {
-	std::optional<std::string> TextureManager::Load(const std::string& filepath, std::string userKey)
+	std::optional<std::shared_ptr<Texture>> TextureManager::Load(const std::string& filepath, const TextureType& type, const std::string& userKey)
 	{
+		// Check if the texture is already loaded
 		auto it = m_TextureMap.find(filepath);
 		if (it != m_TextureMap.end())
 		{
-			return filepath;
+			return (*it).second;
 		}
 
 		const char* filepath_c = filepath.c_str();
@@ -73,9 +74,12 @@ namespace Wave
 		{
 			key = userKey;
 		}		
-		AddTexture(key, { id, filepath, width, height });
 
-		return filepath;
+		// Add texture
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>(id, type, filepath, width, height);
+		AddTexture(key, texture);
+
+		return texture;
 	}
 
 	void TextureManager::Bind(const std::string& key, GLenum textureUnit)
@@ -85,7 +89,7 @@ namespace Wave
 		{
 			auto texture = (*it).second;
 			glActiveTexture(textureUnit);
-			glBindTexture(GL_TEXTURE_2D, texture.Id);
+			glBindTexture(GL_TEXTURE_2D, texture->Id);
 		}
 	}
 
@@ -94,9 +98,9 @@ namespace Wave
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void TextureManager::AddTexture(std::string key, Texture texture)
+	void TextureManager::AddTexture(std::string key, std::shared_ptr<Texture> texture)
 	{
-		auto pair = std::pair<std::string, Texture>(key, texture);
+		auto pair = std::pair<std::string, std::shared_ptr<Texture>>(key, texture);
 		m_TextureMap.insert(pair);
 		TRACE("Added texture: {}", key);
 	}

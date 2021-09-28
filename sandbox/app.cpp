@@ -6,14 +6,24 @@ namespace Sandbox
 	App::App(const int& width, const int& height, const char* title) 
 		: Wave::WindowGlfw(width, height, title)
 	{
+		auto& tm = Wave::TextureManager::GetInstance();
+		
+		std::string texDir = Wave::Asset::GetDirectory() + "/textures/";
+		tm.Load(texDir + "container_diffuse.png", Wave::TextureType::Diffuse, "c_diff");
+		tm.Load(texDir + "container_specular.png", Wave::TextureType::Diffuse, "c_spec");
+		tm.Load(texDir + "matrix.jpg", Wave::TextureType::Diffuse, "matrix");
+
 		auto shaderDir = Wave::Asset::GetDirectory() + "/shaders/";
 		m_Shader.Load(shaderDir + "phong");
 		m_Shader.Begin();
-		m_Shader.SetFloat("u_Material.shininess", 32.0f);
+		/*m_Shader.SetInt("u_Material.diffuse", 0);
+		m_Shader.SetInt("u_Material.specular", 1);
+		m_Shader.SetInt("u_Material.emission", 2);*/
 		m_Shader.End();
 
 		auto modelDir = Wave::Asset::GetDirectory() + "/models/";
 		m_Model.Load(modelDir + "/backpack/backpack.obj");
+		m_Vb.Create(Wave::Cube::GetVertices());
 
 		m_Camera = std::make_unique<Wave::Camera>(60, Window::GetWidth(), Window::GetHeight(), 0.1f, 1000.f);
 		m_Camera->SetPos({ 0, 0, 3 });
@@ -38,8 +48,6 @@ namespace Sandbox
 
 	void App::Render(const float& deltaTime)
 	{
-
-
 		glm::vec3 cubePositions[] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
 			glm::vec3(2.0f,  5.0f, -15.0f),
@@ -62,6 +70,9 @@ namespace Sandbox
 		};
 
 		m_Shader.Begin();
+		
+		m_Shader.SetFloat("u_Material.shininess", 32.0f);
+		
 		// Directional light
 		m_Shader.SetVec3("u_DirLight.direction", -0.2f, -1.0f, -0.3f);
 		m_Shader.SetVec3("u_DirLight.ambient", 0.05f, 0.05f, 0.05f);

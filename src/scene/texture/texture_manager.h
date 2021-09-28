@@ -13,19 +13,19 @@ namespace Wave
 			static TextureManager instance;
 			return instance;
 		}
-	public:
 		// TODO: Remove userKey 
-		std::optional<std::string> Load(const std::string& filepath, std::string userKey = "");
+		std::optional<std::shared_ptr<Texture>> Load(const std::string& filepath, const TextureType&, const std::string& userKey = "");
 		void Bind(const std::string& key, GLenum textureUnit);
 		void Unbind();
+
 	private:
 		TextureManager() {};
+		std::unordered_map<std::string, std::shared_ptr<Texture>> m_TextureMap;
+
 	private:
-		std::string m_TextureDir;
-		std::unordered_map<std::string, Texture> m_TextureMap;
-	private:
-		void AddTexture(std::string key, Texture);
+		void AddTexture(std::string key, std::shared_ptr<Texture>);
 		void DeleteTexture(const std::string&);
+
 	public:
 		// C++ 11, We can use the better technique of deleting the methods we don't want.
 		TextureManager(const TextureManager&) = delete;
@@ -35,6 +35,7 @@ namespace Wave
 		//       be public as it results in better error messages
 		//       due to the compilers behavior to check accessibility
 		//       before deleted status
+
 	private:
 		struct Format
 		{

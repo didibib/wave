@@ -8,8 +8,17 @@ namespace Wave
 	typedef unsigned int	uint;
 	typedef unsigned char	byte;
 
-	enum class Direction	{ Forward, Right, Up, Backward, Left, Down };
-	enum class TextureType	{ Diffuse, Specular, Height };
+	enum class Direction { Forward, Right, Up, Backward, Left, Down };
+	enum class TextureType { Diffuse, Specular, Height };
+	inline std::string TextureTypeToString(const TextureType& type)
+	{
+		static std::string strings[] = {
+			"diffuse",
+			"specular",
+			"height"
+		};
+		return strings[(int)type];
+	}
 
 	namespace Random
 	{
@@ -24,7 +33,7 @@ namespace Wave
 		}
 		inline float Float() { return Uint() * 2.3283064365387e-10f; }
 		inline float Range(float range) { return Float() * range; }
-	}	
+	}
 
 	namespace Math
 	{

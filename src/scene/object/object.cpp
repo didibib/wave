@@ -8,11 +8,20 @@ namespace Wave
 	{
 	}
 
-	glm::vec3 Object::GetPos()
+	void Object::Translate(glm::vec3 translation)
+	{
+		m_Model = glm::translate(m_Model, translation);
+	}
+
+	void Object::Rotate(float angleInRadians, glm::vec3 axis)
+	{
+		m_Model = glm::rotate(m_Model, angleInRadians, axis);
+	}
+
+	const glm::vec3& Object::GetPos()
 	{
 		return m_Position;
 	}
-
 
 	void Object::SetPos(glm::vec3 const& pos)
 	{
@@ -26,15 +35,13 @@ namespace Wave
 		m_Position.z = z;
 	}
 
-	void Object::Translate(glm::vec3 translation)
+	const glm::mat4& Object::GetModelMatrix()
 	{
-		m_Model = glm::translate(m_Model, translation);
+		return m_Model;
 	}
 
-	void Object::Rotate(float angleInRadians, glm::vec3 axis)
+	const glm::mat4& Object::GetNormalMatrix()
 	{
-		m_Model = glm::rotate(m_Model, angleInRadians, axis);
+		return glm::transpose(glm::inverse(m_Model));
 	}
 }
-
-
