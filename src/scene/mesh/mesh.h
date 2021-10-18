@@ -11,6 +11,7 @@ namespace Wave
 		Mesh(std::vector<Vertex>&& vertices, std::vector<std::shared_ptr<Texture>>&& textures, std::vector<uint>&& indices = {});
 		~Mesh();
 		void Draw(const Shader&) const;
+
 	private:
 		std::vector<Vertex> m_Vertices;
 		std::vector<uint> m_Indices;

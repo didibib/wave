@@ -7,9 +7,17 @@ set(WAVE_PCH_CPP
     "pch/wavepch.cpp"
 )
 
-set(WAVE_SOURCE_LIST       
+set(WAVE_SOURCE_LIST
+    "engine/engine.h"
+    "engine/engine.cpp"
+    "event/event.h"
+    "event/event_handler.h"
+    "event/event_handler.cpp"       
     "imgui/imgui_context.h"
-    "imgui/imgui_context.cpp"    
+    "imgui/imgui_context.cpp"
+    "include/wave.h"
+    ${WAVE_PCH_H}
+    ${WAVE_PCH_CPP}    
     "scene/camera/camera.h"
     "scene/camera/camera.cpp"
     "scene/light/light.h"
@@ -29,14 +37,9 @@ set(WAVE_SOURCE_LIST
     "scene/texture/texture.h"
     "scene/texture/texture_manager.h"
     "scene/texture/texture_manager.cpp" 
-    "event/event.h"
-    "event/event_handler.h"
-    "event/event_handler.cpp"
-    "include/wave.h"
-    ${WAVE_PCH_H}
-    ${WAVE_PCH_CPP}
-    "util/log.h"
-    "util/log.cpp"
+    "util/log/log.h"
+    "util/log/log.cpp"
+    "util/singleton.h"
     "util/util.h"
     "window/window.h"
     "window/window_glfw.h"

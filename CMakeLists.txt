@@ -65,11 +65,11 @@ set(FREE_IMAGE_LIB      ${WAVE_VENDOR_DIR}/freeimage/FreeImage.lib)
 message(STATUS "Adding subdirectory 'src'")
 add_subdirectory(src)
 
-message(STATUS "Adding subdirectory 'sandbox'")
-add_subdirectory(sandbox)
+message(STATUS "Adding subdirectory 'editor'")
+add_subdirectory(editor)
 
-message(STATUS "Linking static lib 'wave' with executable 'sandbox'")
-target_link_libraries(sandbox PRIVATE wave)
+message(STATUS "Linking static lib 'wave' with executable 'editor'")
+target_link_libraries(editor PRIVATE wave)
 
 # function can be found in: cmake/
-set_startup_project(sandbox)
+set_startup_project(editor)
