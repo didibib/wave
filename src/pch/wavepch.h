@@ -31,7 +31,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 // Utility
-#include "util/log/log.h"
+#include "util/logger/logger.h"
 #include "util/singleton.h"
 #include "util/util.h"
 #include "scene/mesh/vertex.h"

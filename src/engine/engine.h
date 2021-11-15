@@ -2,7 +2,7 @@
 
 namespace Wave
 {
-	class Engine
+	class Engine : public Singleton<Engine>
 	{
 
 	};

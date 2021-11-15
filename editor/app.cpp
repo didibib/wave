@@ -8,6 +8,8 @@ namespace Sandbox
 	{
 		auto& tm = Wave::TextureManager::GetInstance();
 		
+		auto tset = Wave::TextureManager();
+
 		std::string texDir = Wave::Asset::GetDirectory() + "/textures/";
 		tm.Load(texDir + "container_diffuse.png", Wave::TextureType::Diffuse, "c_diff");
 		tm.Load(texDir + "container_specular.png", Wave::TextureType::Diffuse, "c_spec");
