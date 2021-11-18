@@ -32,29 +32,54 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 # Update all git submodules, function can be found in: cmake/
 update_submodules()
 
+# Filter for vendor 
+set(VENDOR_FILTER "vendor")
+
 # Start building
+# glad
 message(STATUS "Adding subdirectory 'glad'")
 add_subdirectory(${WAVE_VENDOR_DIR}/glad)
 
+set_target_properties(glad PROPERTIES FOLDER ${VENDOR_FILTER})
+
+# imgui
 message(STATUS "Adding subdirectory 'imgui'")
 add_subdirectory(${WAVE_VENDOR_DIR}/imgui)
 
+set_target_properties(imgui PROPERTIES FOLDER ${VENDOR_FILTER})
+
+# glfw
 message(STATUS "Adding subdirectory 'glfw'")
 set(GLFW_BUILD_DOCS OFF)
 add_subdirectory(${WAVE_VENDOR_DIR}/glfw)
 
+set(GLFW_VENDOR_FILTER "${VENDOR_FILTER}/GLFW3")
+set_target_properties(glfw PROPERTIES FOLDER ${GLFW_VENDOR_FILTER})
+set_target_properties(uninstall PROPERTIES FOLDER ${GLFW_VENDOR_FILTER})
+set_target_properties(update_mappings PROPERTIES FOLDER ${GLFW_VENDOR_FILTER})
+
+# glm
 message(STATUS "Adding subdirectory 'glm'")
 add_subdirectory(${WAVE_VENDOR_DIR}/glm)
 
+# spdlog
 message(STATUS "Adding subdirectory 'spdlog'")
 add_subdirectory(${WAVE_VENDOR_DIR}/spdlog)
 
+set_target_properties(spdlog PROPERTIES FOLDER ${VENDOR_FILTER})
+
+# assimp
 message(STATUS "Adding subdirectory 'assimp'")
 # We want to link assimp statically, otherwise we have to copy the dll to the .exe
 set(BUILD_SHARED_LIBS OFF)
 set(ASSIMP_BUILD_TESTS OFF)
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF) 
 add_subdirectory(${WAVE_VENDOR_DIR}/assimp)
+
+set(ASSIMP_VENDOR_FILTER "${VENDOR_FILTER}/assimp")
+set_target_properties(assimp PROPERTIES FOLDER ${ASSIMP_VENDOR_FILTER})
+set_target_properties(UpdateAssimpLibsDebugSymbolsAndDLLs PROPERTIES FOLDER ${ASSIMP_VENDOR_FILTER})
+set_target_properties(zlibstatic PROPERTIES FOLDER ${ASSIMP_VENDOR_FILTER})
 
 message(STATUS "Setting FreeImage variables")
 # We use these variables for 'wave' project
