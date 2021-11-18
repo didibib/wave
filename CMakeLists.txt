@@ -17,7 +17,7 @@ include(cmake/ignore_precompiled_header.cmake)
 include(cmake/set_target_output_directories.cmake)
 
 # Set the project name and version
-project(WaveEngine VERSION 1.0)
+project(wave-engine VERSION 1.0)
 
 # Use folder structure 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -39,20 +39,17 @@ set(VENDOR_FILTER "vendor")
 # glad
 message(STATUS "Adding subdirectory 'glad'")
 add_subdirectory(${WAVE_VENDOR_DIR}/glad)
-
 set_target_properties(glad PROPERTIES FOLDER ${VENDOR_FILTER})
 
 # imgui
 message(STATUS "Adding subdirectory 'imgui'")
 add_subdirectory(${WAVE_VENDOR_DIR}/imgui)
-
 set_target_properties(imgui PROPERTIES FOLDER ${VENDOR_FILTER})
 
 # glfw
 message(STATUS "Adding subdirectory 'glfw'")
 set(GLFW_BUILD_DOCS OFF)
 add_subdirectory(${WAVE_VENDOR_DIR}/glfw)
-
 set(GLFW_VENDOR_FILTER "${VENDOR_FILTER}/GLFW3")
 set_target_properties(glfw PROPERTIES FOLDER ${GLFW_VENDOR_FILTER})
 set_target_properties(uninstall PROPERTIES FOLDER ${GLFW_VENDOR_FILTER})
@@ -60,6 +57,7 @@ set_target_properties(update_mappings PROPERTIES FOLDER ${GLFW_VENDOR_FILTER})
 
 # glm
 message(STATUS "Adding subdirectory 'glm'")
+set(BUILD_TESTING OFF)
 add_subdirectory(${WAVE_VENDOR_DIR}/glm)
 
 # spdlog
@@ -71,11 +69,10 @@ set_target_properties(spdlog PROPERTIES FOLDER ${VENDOR_FILTER})
 # assimp
 message(STATUS "Adding subdirectory 'assimp'")
 # We want to link assimp statically, otherwise we have to copy the dll to the .exe
-set(BUILD_SHARED_LIBS OFF)
-set(ASSIMP_BUILD_TESTS OFF)
-set(ASSIMP_BUILD_ASSIMP_TOOLS OFF) 
+option(BUILD_SHARED_LIBS OFF)
+option(ASSIMP_BUILD_TESTS OFF)
+option(ASSIMP_BUILD_ASSIMP_TOOLS OFF) 
 add_subdirectory(${WAVE_VENDOR_DIR}/assimp)
-
 set(ASSIMP_VENDOR_FILTER "${VENDOR_FILTER}/assimp")
 set_target_properties(assimp PROPERTIES FOLDER ${ASSIMP_VENDOR_FILTER})
 set_target_properties(UpdateAssimpLibsDebugSymbolsAndDLLs PROPERTIES FOLDER ${ASSIMP_VENDOR_FILTER})
@@ -87,8 +84,8 @@ set(FREE_IMAGE_INCLUDE  ${WAVE_VENDOR_DIR}/freeimage/include)
 set(FREE_IMAGE_DLL      ${WAVE_VENDOR_DIR}/freeimage/FreeImage.dll)
 set(FREE_IMAGE_LIB      ${WAVE_VENDOR_DIR}/freeimage/FreeImage.lib)
 
-message(STATUS "Adding subdirectory 'src'")
-add_subdirectory(src)
+message(STATUS "Adding subdirectory 'engine'")
+add_subdirectory(engine)
 
 message(STATUS "Adding subdirectory 'editor'")
 add_subdirectory(editor)
