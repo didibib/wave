@@ -2,19 +2,15 @@
 set(EDITOR_TARGET_NAME "editor")
 
 # Collect files
-set(EDITOR_PCH_H
-    "pch/editorpch.h"
-)
-set(EDITOR_PCH_CPP
-    "pch/editorpch.cpp"
-)
+set(EDITOR_PCH_H "pch/editorpch.h")
+set(EDITOR_PCH_CPP "pch/editorpch.cpp")
 
 set(EDITOR_SOURCE_LIST
-    "app.h"
-    "app.cpp"
-    "main.cpp"
     ${EDITOR_PCH_H}
     ${EDITOR_PCH_CPP}
+    "editor_app.h"
+    "editor_app.cpp"
+    "editor_main.cpp"
 )
 
 add_executable(${EDITOR_TARGET_NAME} ${EDITOR_SOURCE_LIST})

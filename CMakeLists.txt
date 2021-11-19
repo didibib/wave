@@ -36,15 +36,9 @@ update_submodules()
 set(VENDOR_FILTER "vendor")
 
 # Start building
-# glad
 message(STATUS "Adding subdirectory 'glad'")
 add_subdirectory(${WAVE_VENDOR_DIR}/glad)
 set_target_properties(glad PROPERTIES FOLDER ${VENDOR_FILTER})
-
-# imgui
-message(STATUS "Adding subdirectory 'imgui'")
-add_subdirectory(${WAVE_VENDOR_DIR}/imgui)
-set_target_properties(imgui PROPERTIES FOLDER ${VENDOR_FILTER})
 
 # glfw
 message(STATUS "Adding subdirectory 'glfw'")
@@ -63,7 +57,6 @@ add_subdirectory(${WAVE_VENDOR_DIR}/glm)
 # spdlog
 message(STATUS "Adding subdirectory 'spdlog'")
 add_subdirectory(${WAVE_VENDOR_DIR}/spdlog)
-
 set_target_properties(spdlog PROPERTIES FOLDER ${VENDOR_FILTER})
 
 # assimp

@@ -1,13 +1,12 @@
 #include "pch/editorpch.h"
-#include "app.h"
+#include "editor_app.h"
 
-namespace Sandbox
+namespace Editor
 {
-	App::App(const int& width, const int& height, const char* title) 
-		: Wave::WindowGlfw(width, height, title)
+	void EditorApp::Init()
 	{
 		auto& tm = Wave::TextureManager::GetInstance();
-		
+
 		auto tset = Wave::TextureManager();
 
 		std::string texDir = Wave::Asset::GetDirectory() + "/textures/";
@@ -27,14 +26,14 @@ namespace Sandbox
 		m_Model.Load(modelDir + "/backpack/backpack.obj");
 		m_Vb.Create(Wave::Cube::GetVertices());
 
-		m_Camera = std::make_unique<Wave::Camera>(60, Window::GetWidth(), Window::GetHeight(), 0.1f, 1000.f);
-		m_Camera->SetPos({ 0, 0, 3 });
+		//m_Camera = std::make_unique<Wave::Camera>(60, Window::GetWidth(), Window::GetHeight(), 0.1f, 1000.f);
+		//m_Camera->SetPos({ 0, 0, 3 });
 		m_Light.SetPos({ 0.f, 3.f, 0.f });
 	}
 
-	void App::Update(const float& deltaTime)
+	void EditorApp::Update(const float& deltaTime)
 	{
-		Wave::EventHandler& inputHandler = GetEventHandler();
+		/*Wave::EventHandler& inputHandler = GetEventHandler();
 		if (inputHandler.IsMouseRepeat(GLFW_MOUSE_BUTTON_2))
 		{
 			if (inputHandler.IsKeyRepeat(GLFW_KEY_W)) m_Camera->Move(Wave::Direction::Forward, deltaTime);
@@ -45,10 +44,10 @@ namespace Sandbox
 			if (inputHandler.IsKeyRepeat(GLFW_KEY_LEFT_CONTROL)) m_Camera->Move(Wave::Direction::Down, deltaTime);
 			auto offset = inputHandler.GetCursor().GetOffset();
 			m_Camera->Cursor(offset.x, offset.y);
-		}
+		}*/
 	}
 
-	void App::Render(const float& deltaTime)
+	void EditorApp::Render(const float& deltaTime)
 	{
 		glm::vec3 cubePositions[] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
