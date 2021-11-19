@@ -1,4 +1,4 @@
-#version 410 core
+#version 330 core
 
 struct Material {
     sampler2D diffuse;
@@ -7,7 +7,7 @@ struct Material {
     float shininess;
 };
 
-struct DirectionalLight {
+struct DirLight {
     vec3 direction;
     vec3 ambient;
     vec3 diffuse;
@@ -46,12 +46,12 @@ out vec4 FragColor;
 
 uniform vec3 u_ViewPosition;
 uniform Material u_Material;
-uniform DirectionalLight u_DirLight;
+uniform DirLight u_DirLight;
 uniform SpotLight u_SpotLight;
 #define NR_POINT_LIGHTS 4  
 uniform PointLight u_PointLights[NR_POINT_LIGHTS];
 
-vec3 CalcDirLight(DirectionalLight _light, vec3 _normal, vec3 _viewDir);
+vec3 CalcDirLight(DirLight _light, vec3 _normal, vec3 _viewDir);
 vec3 CalcPointLight(PointLight _light, vec3 _normal, vec3 _viewDir, vec3 _fragPos);
 vec3 CalcSpotLight(SpotLight _light, vec3 _normal, vec3 _viewDir, vec3 _fragPos);
 
@@ -70,7 +70,7 @@ void main()
     FragColor = vec4(result, 1.0);  
 }
 
-vec3 CalcDirLight(DirectionalLight _light, vec3 _normal, vec3 _viewDir){
+vec3 CalcDirLight(DirLight _light, vec3 _normal, vec3 _viewDir){
     vec3 lightDir = normalize(-_light.direction);
     // Diffuse
     vec3 diffuseMap = texture(u_Material.diffuse, Uv).rgb;

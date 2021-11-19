@@ -3,18 +3,18 @@
 #include "app/app.h"
 #include "engine.h"
 
-void Wave::Engine::StartUp(App& app, EngineSettings& settings)
+void Wave::Engine::StartUp(std::unique_ptr<App> app)
 {
 	glfwInit();
-	m_Window = std::make_unique<Window>();
-	m_Window->Create(settings.Width, settings.Height, settings.Title);
-	app.Init();
+	Logger::Init();
+	m_App = std::move(app);
+	m_App->Init();
 }
 
 void Wave::Engine::Run()
 {
-	bool isRunning = true;
-	while (isRunning)
+	AppState appState = AppState::Running;
+	while (appState == AppState::Running)
 	{
 		static float currentTime = 0.0f;
 		static float previousTime = 0.0f;
@@ -24,14 +24,13 @@ void Wave::Engine::Run()
 		deltaTime = currentTime - previousTime;
 		previousTime = currentTime;
 
-		m_Window->Begin();
-
-		m_Window->End();
+		appState = m_App->Update(deltaTime);
 	}
 }
 
 void Wave::Engine::Shutdown()
 {
-	m_Window->Destroy();
+	m_App->Shutdown();
+	Logger::Shutdown();
 	glfwTerminate();
 }

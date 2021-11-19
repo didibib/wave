@@ -7,7 +7,6 @@ set(WAVE_PCH_CPP "pch/wavepch.cpp")
 
 set(WAVE_SOURCE_LIST
     "app/app.h"
-    "app/app.cpp"
     "event/event.h"
     "event/event_handler.h"
     "event/event_handler.cpp"       
@@ -54,7 +53,10 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${WAVE_SOURCE_LIST})
 
 # Add macro specifying assets directory
 # ${ASSETS_DIR} is set in the root 
-target_compile_definitions(${WAVE_TARGET_NAME} PUBLIC WAVE_ASSETS_DIR=${WAVE_ASSETS_DIR})
+target_compile_definitions(${WAVE_TARGET_NAME} PUBLIC 
+    WAVE_ASSETS_DIR=${WAVE_ASSETS_DIR}
+    IMGUI_IMPL_OPENGL_LOADER_GLAD=1
+)
 
 # Set output directories    
 set_target_output_directories(${WAVE_TARGET_NAME})
@@ -64,14 +66,10 @@ set_target_precompiled_header(${WAVE_TARGET_NAME} WAVE_PCH_H WAVE_PCH_CPP)
 
 # Specify include directories
 # Make them public so that executables can inherit them
-target_compile_definitions(${WAVE_TARGET_NAME} PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD=1)
-
 target_include_directories(${WAVE_TARGET_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${FREE_IMAGE_INCLUDE}
     "${WAVE_VENDOR_DIR}/imgui"
-    "${WAVE_VENDOR_DIR}/glad/include"
-    "${WAVE_VENDOR_DIR}/glad/src"
 )
 
 # Find OpenGL

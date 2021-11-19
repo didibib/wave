@@ -1,16 +1,14 @@
 #include "pch/editorpch.h"
 #include "editor_app.h"
 
+using namespace Editor;
+
 int main()
 {
-	Wave::Engine& engine = Wave::Engine::GetInstance();
-	Editor::EditorApp editorApp;
+	std::unique_ptr<EditorApp> editorApp = std::make_unique<EditorApp>();
 
-	Wave::EngineSettings settings;
-	settings.Width = 800;
-	settings.Height = 600;
-	settings.Title = "WAVE";
-	engine.StartUp(editorApp, settings);
+	Wave::Engine& engine = Wave::Engine::GetInstance();
+	engine.StartUp(std::move(editorApp));
 	engine.Run();
 	engine.Shutdown();
 

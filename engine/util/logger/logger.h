@@ -7,7 +7,7 @@
 
 namespace Wave
 {
-	namespace Log
+	namespace Logger
 	{
 		void Init();
 		void Shutdown();

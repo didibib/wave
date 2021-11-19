@@ -19,7 +19,7 @@ namespace Wave
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)window->GetNativeWindow(), true);
+		ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)window->GetWindowPointer(), true);
 				
 		std::array<char, 13> c_str = { "#version " };
 		std::to_chars(&c_str[9], &c_str[12], WAVE_OPENGL_VERSION);

@@ -2,7 +2,7 @@
 
 namespace Wave
 {
-	class Window;
+	enum class AppState { Running, Stopped };
 
 	class App
 	{
@@ -10,10 +10,7 @@ namespace Wave
 		App() = default;
 		~App() = default;
 		virtual void Init() = 0;
-		virtual void Update(const float&) = 0;
-
-	protected:
-		std::vector<std::unique_ptr<Window>> m_Windows;
-
+		virtual AppState Update(const float&) = 0;
+		virtual void Shutdown() = 0;
 	};
 }

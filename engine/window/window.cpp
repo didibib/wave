@@ -57,6 +57,7 @@ namespace Wave
 	void Window::End()
 	{
 		glfwSwapBuffers(m_GlfwWindow);
+		glfwPollEvents();
 	}
 
 

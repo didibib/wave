@@ -3,7 +3,7 @@
 
 namespace Wave
 {
-	void Log::Init()
+	void Logger::Init()
 	{
 		// https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
 		// %^ Start color range (can be used only once)
@@ -18,7 +18,7 @@ namespace Wave
 		spdlog::set_default_logger(logger);
 	}
 
-	void Log::Shutdown()
+	void Logger::Shutdown()
 	{
 		spdlog::shutdown();
 	}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "app/app.h"
+#include "window/window.h"
 
 namespace Editor
 {
@@ -8,13 +9,17 @@ namespace Editor
 	{
 	public:
 		EditorApp() = default;
-		~EditorApp() = default;
-		
+		~EditorApp() = default;		
 		void Init() override;
-		void Update(const float&) override;
+		Wave::AppState Update(const float&) override;
+		void Shutdown() override;
+
 		void Render(const float&);
 
 	private:
+		bool HasRunningWindows();
+
+		std::vector<std::unique_ptr<Wave::Window>> m_Windows;
 		std::unique_ptr<Wave::Camera> m_Camera;
 		Wave::Shader m_Shader;
 		Wave::VertexBuffer m_Vb;

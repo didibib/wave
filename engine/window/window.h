@@ -9,6 +9,8 @@ namespace Wave
 	class Window
 	{
 	public:
+		Window() = default;
+		~Window() = default;
 		void Create(int const& width, int const& height, const char* title);
 		void Begin();
 		void End();
@@ -16,7 +18,7 @@ namespace Wave
 		int GetWidth() { return m_Width; }
 		int GetHeight() { return m_Height; }
 		std::string GetTitle() { return m_Title; }
-		void* GetNativeWindow() { return m_GlfwWindow; }
+		GLFWwindow* GetWindowPointer() { return m_GlfwWindow; }
 		//EventHandler& GetEventHandler();
 	private:
 		int m_Width;
