@@ -1,5 +1,7 @@
 #pragma once
 
+#include "scene/object/object.h"
+
 namespace Wave
 {
 	class Light : public Object

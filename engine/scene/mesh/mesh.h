@@ -3,6 +3,7 @@
 namespace Wave
 {
 	class VertexBuffer;
+	class Shader;
 
 	class Mesh
 	{

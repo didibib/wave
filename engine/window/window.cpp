@@ -1,22 +1,31 @@
 #include "pch/wavepch.h"
+#include "window.h"
+#include "window_params.h"
 #include "imgui/imgui_context.h"
 #include "event/event.h"
 #include "event/event_handler.h"
-#include "window.h"
 
 namespace Wave
 {
-	void Window::Create(int const& width, int const& height, const char* title)
+	Window::Window() : m_Width(0), m_Height(0)
 	{
-		TRACE("Initializing window: {}", title);
-		m_Width = width;
-		m_Height = height;
-		m_Title = title;
+	}
+	Window::~Window()
+	{
+		Destroy();
+	}
+
+	void Window::Init(WindowParams settings)
+	{
+		TRACE("Initializing window: {}", settings.mTitle);
+		m_Width = settings.mWidth;
+		m_Height = settings.mHeight;
+		m_Title = settings.mTitle;
 
 		// Window hints need to be set before the creation of the window. They function as additional arguments to glfwCreateWindow.
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, WAVE_OPENGL_VERSION_MAJ);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, WAVE_OPENGL_VERSION_MIN);
-		m_GlfwWindow = glfwCreateWindow(width, height, title, nullptr, nullptr);
+		m_GlfwWindow = glfwCreateWindow(m_Width, m_Height, m_Title.c_str(), nullptr, nullptr);
 
 		if (!m_GlfwWindow)
 		{
@@ -48,30 +57,47 @@ namespace Wave
 		//m_EventHandler = std::make_unique<EventHandler>();
 	}
 
-	void Window::Begin()
+	void Window::Use() const
+	{
+		MakeContextCurrent();
+		Clear();
+		SwapBuffers();
+	}
+
+	void Window::Destroy() const
+	{
+		glfwDestroyWindow(m_GlfwWindow);
+	}
+
+	bool Window::ShouldClose() const
+	{
+		return glfwWindowShouldClose(m_GlfwWindow);
+	}
+
+	void Window::MakeContextCurrent() const
 	{
 		glfwMakeContextCurrent(m_GlfwWindow);
-		Clear();
 	}
 
-	void Window::End()
+	void Window::Clear() const
+	{
+		glm::vec4 clear_color = glm::vec4(0.002f, 0.002f, 0.002f, 1.00f);
+		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	void Window::SwapBuffers() const
 	{
 		glfwSwapBuffers(m_GlfwWindow);
-		glfwPollEvents();
-	}
-
-
-	void Window::Destroy()
-	{
-		// Shutdown glfw
-		glfwDestroyWindow(m_GlfwWindow);
-		glfwTerminate();
 	}
 
 	/*void Window::Run()
 	{
 		while (!glfwWindowShouldClose(m_GlfwWindow))
 		{
+			glfwSwapBuffers(m_GlfwWindow);
+			glfwPollEvents();
+
 			UpdateTime();
 
 			m_EventHandler->Update(m_EventBuffer);
@@ -84,8 +110,6 @@ namespace Wave
 			m_ImGuiContext->Render();
 
 			m_EventHandler->Flush();
-			glfwSwapBuffers(m_GlfwWindow);
-			glfwPollEvents();
 		}
 	}*/
 
@@ -93,13 +117,6 @@ namespace Wave
 	/*EventHandler& Window::GetEventHandler() {
 		return *m_EventHandler; 
 	}*/
-
-	void Window::Clear()
-	{
-		glm::vec4 clear_color = glm::vec4(0.002f, 0.002f, 0.002f, 1.00f);
-		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
 
 	template<typename T>
 	void Window::TrimBuffer(std::queue<T>& buffer)
@@ -227,4 +244,71 @@ namespace Wave
 		glfwSetErrorCallback(Window::ErrorCallback);
 	}
 #pragma endregion
+
+
+	void WindowSubsystem::AddNewWindow(WindowParams& settings)
+	{
+		auto window = std::make_unique<Window>();
+		window->Init(settings);
+		m_Windows.push_back(std::move(window));
+	}
+
+	void WindowSubsystem::Init()
+	{
+
+	}
+
+	Result WindowSubsystem::Update(float const&)
+	{
+		if (!HasOpenWindows()) return Result::Terminated;
+		
+		m_Windows[0]->MakeContextCurrent();
+		m_Windows[0]->Clear();
+
+
+		/*for (auto& w : m_Windows)
+		{
+			w->Use();
+		}*/
+		//PollEvents();
+		
+		return Result::Running;
+	}
+
+	void WindowSubsystem::End()
+	{
+		m_Windows[0]->SwapBuffers();
+	}
+
+	void WindowSubsystem::PollEvents() const
+	{
+		glfwPollEvents();
+	}
+
+	bool WindowSubsystem::HasOpenWindows()
+	{			
+		/*for (auto it = m_Windows.begin(); it != m_Windows.end();)
+		{
+			if (glfwWindowShouldClose((*it)->GetWindowPointer()))
+			{
+				it = m_Windows.erase(it);
+			}
+			else
+			{
+				it++;
+			}
+		}*/
+
+		m_Windows.erase(
+			std::remove_if(
+				m_Windows.begin(), 
+				m_Windows.end(),
+				[](std::unique_ptr<Wave::Window>& window){
+					return glfwWindowShouldClose(window->GetWindowPointer());
+				})
+			, m_Windows.end()
+		);
+
+		return m_Windows.size() > 0;	
+	}
 }

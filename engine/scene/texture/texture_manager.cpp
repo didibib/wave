@@ -51,7 +51,7 @@ namespace Wave
 			return {};
 		}
 
-		uint id;
+		uint id = 0;
 		glGenTextures(1, &id);
 		if (id == 0)
 		{

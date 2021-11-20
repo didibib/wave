@@ -1,7 +1,7 @@
 #include "pch/wavepch.h"
+#include "mesh.h"
 #include "vertex_buffer.h"
 #include "scene/shader/shader.h"
-#include "mesh.h"
 
 namespace Wave
 {

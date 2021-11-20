@@ -1,30 +1,35 @@
 #pragma once
 
 #include "event/event.h"
+#include "util/result.h"
+#include "subsystem.h"
 
 namespace Wave
 {
 	class EventHandler;
+	class WindowParams;
 
 	class Window
 	{
 	public:
-		Window() = default;
-		~Window() = default;
-		void Create(int const& width, int const& height, const char* title);
-		void Begin();
-		void End();
-		void Destroy();
+		Window();
+		~Window();
+		void Init(WindowParams);
+		void Use() const;
+		void Destroy()  const;
+		bool ShouldClose() const;
 		int GetWidth() { return m_Width; }
 		int GetHeight() { return m_Height; }
 		std::string GetTitle() { return m_Title; }
 		GLFWwindow* GetWindowPointer() { return m_GlfwWindow; }
 		//EventHandler& GetEventHandler();
+		void MakeContextCurrent() const;
+		void Clear() const;
+		void SwapBuffers() const;
 	private:
 		int m_Width;
 		int m_Height;
 		std::string m_Title;
-		void Clear();
 		GLFWwindow* m_GlfwWindow = nullptr;
 		//std::unique_ptr<EventHandler> m_EventHandler;
 		const uint m_MaxBufferSize = 16;
@@ -42,5 +47,23 @@ namespace Wave
 		void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 		static void ErrorCallback(int error, const char* description);
 		void SetupCallbacks();
+	};
+
+	class WindowSubsystem : public Subsystem
+	{
+		// https://github.com/glfw/glfw/blob/master/examples/windows.c
+	public:
+		WindowSubsystem() = default;
+		~WindowSubsystem() = default;
+
+		void Init() override;
+		Result Update(float const&) override;
+		void End();
+		void AddNewWindow(WindowParams&);
+
+	private:
+		void PollEvents() const;
+		bool HasOpenWindows();
+		std::vector<std::unique_ptr<Window>> m_Windows;
 	};
 }

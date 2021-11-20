@@ -5,14 +5,6 @@ namespace Editor
 {
 	void EditorApp::Init()
 	{
-		std::unique_ptr<Wave::Window> window1 = std::make_unique<Wave::Window>();
-		window1->Create(800, 600, "Editor");
-		m_Windows.push_back(std::move(window1));
-
-		std::unique_ptr<Wave::Window> window2 = std::make_unique<Wave::Window>();
-		window2->Create(800, 600, "Editor2");
-		m_Windows.push_back(std::move(window2));
-
 		auto& tm = Wave::TextureManager::GetInstance();
 
 		std::string texDir = Wave::Asset::GetDirectory() + "/textures/";
@@ -29,7 +21,7 @@ namespace Editor
 		m_Shader.End();
 
 		auto modelDir = Wave::Asset::GetDirectory() + "/models";
-		//m_Model.Load(modelDir + "/backpack/backpack.obj");
+		m_Model.Load(modelDir + "/backpack/backpack.obj");
 		m_Vb.Create(Wave::Cube::GetVertices());
 
 		m_Camera = std::make_unique<Wave::Camera>(60, 800, 600, 0.1f, 1000.f);
@@ -37,17 +29,8 @@ namespace Editor
 		m_Light.SetPos({ 0.f, 3.f, 0.f });
 	}
 
-	Wave::AppState EditorApp::Update(const float& deltaTime)
+	Wave::Result EditorApp::Update(const float& deltaTime)
 	{
-		if (!HasRunningWindows()) return Wave::AppState::Stopped;
-
-		for (auto& window : m_Windows)
-		{
-			window->Begin();
-			Render(deltaTime);
-			window->End();
-		}
-
 		/*Wave::EventHandler& inputHandler = GetEventHandler();
 		if (inputHandler.IsMouseRepeat(GLFW_MOUSE_BUTTON_2))
 		{
@@ -60,7 +43,8 @@ namespace Editor
 			auto offset = inputHandler.GetCursor().GetOffset();
 			m_Camera->Cursor(offset.x, offset.y);
 		}*/
-		return Wave::AppState::Running;
+		Render(deltaTime);
+		return Wave::Result::Running;
 	}
 
 	void EditorApp::Shutdown()
@@ -130,7 +114,7 @@ namespace Editor
 		m_Shader.SetMat4("u_View", m_Camera->GetViewMatrix());
 		m_Shader.SetVec3("u_ViewPosition", m_Camera->GetPos());
 
-		//m_Model.Draw(m_Shader);
+		m_Model.Draw(m_Shader);
 
 		// Render boxes
 		auto& tm = Wave::TextureManager::GetInstance();
@@ -155,32 +139,5 @@ namespace Editor
 			m_Vb.Draw();
 		}
 		m_Shader.End();
-	}
-
-	bool EditorApp::HasRunningWindows()
-	{		
-		/*for (auto it = m_Windows.begin(); it != m_Windows.end();)
-		{
-			if (glfwWindowShouldClose((*it)->GetWindowPointer()))
-			{
-				it = m_Windows.erase(it);
-			}
-			else
-			{
-				it++;
-			}
-		}*/
-
-		m_Windows.erase(
-			std::remove_if(
-				m_Windows.begin(), 
-				m_Windows.end(),
-				[](std::unique_ptr<Wave::Window>& window){
-					return glfwWindowShouldClose(window->GetWindowPointer());
-				})
-			, m_Windows.end()
-		);
-
-		return m_Windows.size() > 0;
 	}
 }

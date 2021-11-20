@@ -32,7 +32,7 @@
 #include <assimp/postprocess.h>
 // Utility
 #include "util/logger/logger.h"
-#include "util/singleton.h"
+#include "util/locator/locator.h"
 #include "util/util.h"
 #include "scene/mesh/vertex.h"
 #include "scene/texture/texture.h"

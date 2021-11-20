@@ -3,19 +3,31 @@
 namespace Wave
 {
 	class App;
+	class Engine;
+	class WindowParams;
+	class WindowSubsystem;
 
-	class Engine : public Singleton<Engine>
+	class Engine
 	{
 	public:
-		Engine() = default;
-		~Engine() = default;
-		void StartUp(std::unique_ptr<App> app);
+		static Engine& GetInstance()
+		{
+			// Guaranteed to be destroyed.
+			// Instantiated on first use.
+			static Engine instance;
+			return instance;
+		}
+		void Init();
+		void StartUp(App*, WindowParams);
 		void Run();
 		void Shutdown();
-	public:
+		// Singleton requirements
 		Engine(Engine const&) = delete;
 		void operator=(Engine const&) = delete;
+	protected:
+		Engine() = default;
 	private:
-		std::unique_ptr<App> m_App;
+		App* m_App;
+		WindowSubsystem* m_WindowSubsystem;
 	};
 }

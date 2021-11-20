@@ -36,13 +36,15 @@ set(WAVE_SOURCE_LIST
     "scene/texture/texture_manager.cpp" 
     "util/logger/logger.h"
     "util/logger/logger.cpp"
-    "util/locator.h"
-    "util/singleton.h"
+    "util/locator/locator.h"
+    "util/result.h"
     "util/util.h"
     "window/window.h"
     "window/window.cpp"
+    "window/window_params.h"
     "engine.h"
     "engine.cpp"
+    "subsystem.h"
 )
 
 # Build static library

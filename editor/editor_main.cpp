@@ -2,13 +2,20 @@
 #include "editor_app.h"
 
 using namespace Editor;
+using namespace Wave;
 
 int main()
 {
-	std::unique_ptr<EditorApp> editorApp = std::make_unique<EditorApp>();
+	EditorApp* editorApp = new EditorApp();
 
-	Wave::Engine& engine = Wave::Engine::GetInstance();
-	engine.StartUp(std::move(editorApp));
+	Engine& engine = Engine::GetInstance();
+	WindowParams params;
+	params.SetWidth(800);
+	params.SetHeight(600);
+	params.SetTitle("Wave");
+
+	engine.Init();
+	engine.StartUp(editorApp, params);
 	engine.Run();
 	engine.Shutdown();
 
