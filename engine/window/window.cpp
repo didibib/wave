@@ -57,11 +57,16 @@ namespace Wave
 		//m_EventHandler = std::make_unique<EventHandler>();
 	}
 
-	void Window::Use() const
+	void Window::Begin() const
 	{
 		MakeContextCurrent();
 		Clear();
+	}
+
+	void Window::End() const
+	{
 		SwapBuffers();
+		PollEvents();
 	}
 
 	void Window::Destroy() const
@@ -81,8 +86,8 @@ namespace Wave
 
 	void Window::Clear() const
 	{
-		glm::vec4 clear_color = glm::vec4(0.002f, 0.002f, 0.002f, 1.00f);
-		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+		// rgba(13,17,23,1)
+		glClearColor(0.0509f, 0.0667f, 0.0902f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
@@ -91,28 +96,10 @@ namespace Wave
 		glfwSwapBuffers(m_GlfwWindow);
 	}
 
-	/*void Window::Run()
+	void Window::PollEvents() const
 	{
-		while (!glfwWindowShouldClose(m_GlfwWindow))
-		{
-			glfwSwapBuffers(m_GlfwWindow);
-			glfwPollEvents();
-
-			UpdateTime();
-
-			m_EventHandler->Update(m_EventBuffer);
-
-			m_ImGuiContext->Update();
-			Update(m_DeltaTime);
-
-			Clear();
-			Render(m_DeltaTime);
-			m_ImGuiContext->Render();
-
-			m_EventHandler->Flush();
-		}
-	}*/
-
+		glfwPollEvents();
+	}
 
 	/*EventHandler& Window::GetEventHandler() {
 		return *m_EventHandler; 
@@ -130,32 +117,32 @@ namespace Wave
 #pragma region _____CALLBACKS
 	void Window::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-		m_EventBuffer.emplace(std::make_unique<KeyEvent>(key, scancode, action, mods));
-		TrimBuffer(m_EventBuffer);
+		//m_EventBuffer.emplace(std::make_unique<KeyEvent>(key, scancode, action, mods));
+		//TrimBuffer(m_EventBuffer);
 	}
 
 	void Window::MouseCallback(GLFWwindow* window, int button, int action, int mods)
 	{
-		m_EventBuffer.emplace(std::make_unique<MouseEvent>(button, action, mods));
-		TrimBuffer(m_EventBuffer);
+		//m_EventBuffer.emplace(std::make_unique<MouseEvent>(button, action, mods));
+		//TrimBuffer(m_EventBuffer);
 	}
 
 	void Window::CursorCallback(GLFWwindow* window, double xPos, double yPos)
 	{
-		m_EventBuffer.emplace(std::make_unique<CursorEvent>(xPos, yPos));
-		TrimBuffer(m_EventBuffer);
+		//m_EventBuffer.emplace(std::make_unique<CursorEvent>(xPos, yPos));
+		//TrimBuffer(m_EventBuffer);
 	}
 
 	void Window::CursorEnterCallback(GLFWwindow* window, int entered)
 	{
-		m_EventBuffer.emplace(std::make_unique<CursorEnterEvent>(entered));
-		TrimBuffer(m_EventBuffer);
+		//m_EventBuffer.emplace(std::make_unique<CursorEnterEvent>(entered));
+		//TrimBuffer(m_EventBuffer);
 	}
 
 	void Window::ScrollCallback(GLFWwindow* window, double x_offset, double y_offset)
 	{
-		m_EventBuffer.emplace(std::make_unique<ScrollEvent>(x_offset, y_offset));
-		TrimBuffer(m_EventBuffer);
+		//m_EventBuffer.emplace(std::make_unique<ScrollEvent>(x_offset, y_offset));
+		//TrimBuffer(m_EventBuffer);
 	}
 
 	void Window::WindowCloseCallback(GLFWwindow* window)
@@ -165,8 +152,8 @@ namespace Wave
 
 	void Window::WindowFocusCallback(GLFWwindow* window, int focused)
 	{
-		m_EventBuffer.emplace(std::make_unique<WindowFocusEvent>(focused));
-		TrimBuffer(m_EventBuffer);
+		//m_EventBuffer.emplace(std::make_unique<WindowFocusEvent>(focused));
+		//TrimBuffer(m_EventBuffer);
 	}
 
 	void Window::WindowSizeCallback(GLFWwindow* window, int width, int height)
@@ -246,43 +233,31 @@ namespace Wave
 #pragma endregion
 
 
-	void WindowSubsystem::AddNewWindow(WindowParams& settings)
-	{
-		auto window = std::make_unique<Window>();
-		window->Init(settings);
-		m_Windows.push_back(std::move(window));
-	}
-
 	void WindowSubsystem::Init()
 	{
 
 	}
 
+	void WindowSubsystem::AddNewWindow(WindowParams& settings)
+	{
+		auto w = new Window();
+		w->Init(settings);
+		m_Windows.push_back(w);
+	}
+
+	Window const* WindowSubsystem::Get(int index)
+	{
+		return m_Windows[index];
+	}
+
 	Result WindowSubsystem::Update(float const&)
 	{
-		if (!HasOpenWindows()) return Result::Terminated;
-		
-		m_Windows[0]->MakeContextCurrent();
-		m_Windows[0]->Clear();
-
-
-		/*for (auto& w : m_Windows)
-		{
-			w->Use();
-		}*/
-		//PollEvents();
-		
+		if (!HasOpenWindows()) return Result::Terminated;				
 		return Result::Running;
 	}
 
-	void WindowSubsystem::End()
+	void WindowSubsystem::Shutdown()
 	{
-		m_Windows[0]->SwapBuffers();
-	}
-
-	void WindowSubsystem::PollEvents() const
-	{
-		glfwPollEvents();
 	}
 
 	bool WindowSubsystem::HasOpenWindows()
@@ -303,8 +278,8 @@ namespace Wave
 			std::remove_if(
 				m_Windows.begin(), 
 				m_Windows.end(),
-				[](std::unique_ptr<Wave::Window>& window){
-					return glfwWindowShouldClose(window->GetWindowPointer());
+				[](Window* w){
+					return glfwWindowShouldClose(w->GetWindowPointer());
 				})
 			, m_Windows.end()
 		);

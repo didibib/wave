@@ -8,14 +8,17 @@ namespace Wave
 {
 	class EventHandler;
 	class WindowParams;
+	class WindowSubsystem;
 
 	class Window
 	{
+		friend WindowSubsystem;
 	public:
 		Window();
 		~Window();
 		void Init(WindowParams);
-		void Use() const;
+		void Begin() const;
+		void End() const;
 		void Destroy()  const;
 		bool ShouldClose() const;
 		int GetWidth() { return m_Width; }
@@ -23,17 +26,18 @@ namespace Wave
 		std::string GetTitle() { return m_Title; }
 		GLFWwindow* GetWindowPointer() { return m_GlfwWindow; }
 		//EventHandler& GetEventHandler();
+	private:
 		void MakeContextCurrent() const;
 		void Clear() const;
 		void SwapBuffers() const;
-	private:
+		void PollEvents() const;
 		int m_Width;
 		int m_Height;
 		std::string m_Title;
 		GLFWwindow* m_GlfwWindow = nullptr;
 		//std::unique_ptr<EventHandler> m_EventHandler;
 		const uint m_MaxBufferSize = 16;
-		std::queue<std::unique_ptr<Event>> m_EventBuffer;
+		//std::queue<std::unique_ptr<Event>> m_EventBuffer;
 		template<typename T> void TrimBuffer(std::queue<T>& buffer);
 	private:
 		void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int modes);
@@ -54,16 +58,23 @@ namespace Wave
 		// https://github.com/glfw/glfw/blob/master/examples/windows.c
 	public:
 		WindowSubsystem() = default;
-		~WindowSubsystem() = default;
+		~WindowSubsystem()
+		{
+			for (auto& w : m_Windows)
+			{
+				delete w;
+			}
+		}
 
 		void Init() override;
 		Result Update(float const&) override;
-		void End();
+		void Shutdown() override;
+
 		void AddNewWindow(WindowParams&);
+		Window const* Get(int index = 0);
 
 	private:
-		void PollEvents() const;
 		bool HasOpenWindows();
-		std::vector<std::unique_ptr<Window>> m_Windows;
+		std::vector<Window*> m_Windows;
 	};
 }

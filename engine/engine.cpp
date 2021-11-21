@@ -10,11 +10,12 @@ void Wave::Engine::Init()
 	Logger::Init();
 
 	auto& locator = Locator::GetInstance();
-	m_WindowSubsystem = locator.Register<WindowSubsystem>().get();
+	m_WindowSubsystem = locator.Register<WindowSubsystem>();
 }
 
 void Wave::Engine::StartUp(App* app, WindowParams params)
 {
+	// Add main window
 	m_WindowSubsystem->AddNewWindow(params);
 
 	m_App = std::move(app);
@@ -36,8 +37,6 @@ void Wave::Engine::Run()
 		m_WindowSubsystem->Update(deltaTime);
 
 		appState = m_App->Update(deltaTime);
-
-		m_WindowSubsystem->End();
 	}
 }
 

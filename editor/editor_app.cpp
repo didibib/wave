@@ -43,7 +43,14 @@ namespace Editor
 			auto offset = inputHandler.GetCursor().GetOffset();
 			m_Camera->Cursor(offset.x, offset.y);
 		}*/
+
+		auto ws = Wave::Locator::GetInstance().Get<Wave::WindowSubsystem>();
+		auto w = ws->Get();
+
+		w->Begin();
 		Render(deltaTime);
+		w->End();
+
 		return Wave::Result::Running;
 	}
 
