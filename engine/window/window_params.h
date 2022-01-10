@@ -10,21 +10,29 @@ namespace Wave
 	public:
 		void SetWidth(int width)
 		{
-			mWidth = width;
+			m_Width = width;
 		}
-
 		void SetHeight(int height)
 		{
-			mHeight = height;
+			m_Height = height;
 		}
-
 		void SetTitle(const char* title)
 		{
-			mTitle = title;
+			m_Title = title;
+		}
+		void SetMonitor(GLFWmonitor* monitor)
+		{
+			m_Monitor = monitor;
+		}
+		void SetSharedContext(GLFWwindow* share)
+		{
+			m_Share = share;
 		}
 
 	private:
-		int mWidth, mHeight;
-		const char* mTitle;
+		int m_Width = 0, m_Height = 0;
+		const char* m_Title = "";
+		GLFWmonitor* m_Monitor = nullptr;
+		GLFWwindow* m_Share = nullptr;
 	};
 }

@@ -15,25 +15,25 @@ namespace Wave
 		Destroy();
 	}
 
-	void Window::Init(WindowParams settings)
+	void Window::Init(WindowParams& settings)
 	{
-		TRACE("Initializing window: {}", settings.mTitle);
-		m_Width = settings.mWidth;
-		m_Height = settings.mHeight;
-		m_Title = settings.mTitle;
+		TRACE("Initializing window: {}", settings.m_Title);
+		m_Width = settings.m_Width;
+		m_Height = settings.m_Height;
+		m_Title = settings.m_Title;
 
 		// Window hints need to be set before the creation of the window. They function as additional arguments to glfwCreateWindow.
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, WAVE_OPENGL_VERSION_MAJ);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, WAVE_OPENGL_VERSION_MIN);
-		m_GlfwWindow = glfwCreateWindow(m_Width, m_Height, m_Title.c_str(), nullptr, nullptr);
+		
+		m_GlfwWindow = glfwCreateWindow(m_Width, m_Height, m_Title.c_str(), settings.m_Monitor, settings.m_Share);
 
 		if (!m_GlfwWindow)
 		{
 			CRITICAL("Failed to create GLFWindow");
 		}
-		glfwSetWindowUserPointer(m_GlfwWindow, this);
-		glfwMakeContextCurrent(m_GlfwWindow);
 
+		glfwMakeContextCurrent(m_GlfwWindow);
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
 			CRITICAL("Failed to initialize OpengGL context");
@@ -50,9 +50,7 @@ namespace Wave
 			CRITICAL("System doesn't meet the OpenGL version criteria");
 		}
 
-		glEnable(GL_DEPTH_TEST);
-
-		SetupCallbacks();
+		//SetupCallbacks();
 
 		//m_EventHandler = std::make_unique<EventHandler>();
 	}
@@ -66,7 +64,6 @@ namespace Wave
 	void Window::End() const
 	{
 		SwapBuffers();
-		PollEvents();
 	}
 
 	void Window::Destroy() const
@@ -94,11 +91,6 @@ namespace Wave
 	void Window::SwapBuffers() const
 	{
 		glfwSwapBuffers(m_GlfwWindow);
-	}
-
-	void Window::PollEvents() const
-	{
-		glfwPollEvents();
 	}
 
 	/*EventHandler& Window::GetEventHandler() {
@@ -239,20 +231,21 @@ namespace Wave
 	}
 
 	void WindowSubsystem::AddNewWindow(WindowParams& settings)
-	{
+	{		
 		auto w = new Window();
 		w->Init(settings);
 		m_Windows.push_back(w);
 	}
 
-	Window const* WindowSubsystem::Get(int index)
+	Window* WindowSubsystem::Get(int index)
 	{
 		return m_Windows[index];
 	}
 
 	Result WindowSubsystem::Update(float const&)
 	{
-		if (!HasOpenWindows()) return Result::Terminated;				
+		if (!HasOpenWindows()) return Result::Terminated;	
+		PollEvents();
 		return Result::Running;
 	}
 
@@ -285,5 +278,10 @@ namespace Wave
 		);
 
 		return m_Windows.size() > 0;	
+	}
+
+	void WindowSubsystem::PollEvents()
+	{
+		glfwPollEvents();
 	}
 }

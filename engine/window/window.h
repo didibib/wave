@@ -16,7 +16,7 @@ namespace Wave
 	public:
 		Window();
 		~Window();
-		void Init(WindowParams);
+		void Init(WindowParams&);
 		void Begin() const;
 		void End() const;
 		void Destroy()  const;
@@ -30,7 +30,6 @@ namespace Wave
 		void MakeContextCurrent() const;
 		void Clear() const;
 		void SwapBuffers() const;
-		void PollEvents() const;
 		int m_Width;
 		int m_Height;
 		std::string m_Title;
@@ -71,10 +70,11 @@ namespace Wave
 		void Shutdown() override;
 
 		void AddNewWindow(WindowParams&);
-		Window const* Get(int index = 0);
+		Window* Get(int index = 0);
 
 	private:
 		bool HasOpenWindows();
+		void PollEvents();
 		std::vector<Window*> m_Windows;
 	};
 }

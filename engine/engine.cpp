@@ -24,8 +24,8 @@ void Wave::Engine::StartUp(App* app, WindowParams params)
 
 void Wave::Engine::Run()
 {
-	Result appState = Result::Running;
-	while (appState == Result::Running)
+	Result state = Result::Running;
+	while (state == Result::Running)
 	{
 		static float currentTime = 0.0f;
 		static float previousTime = 0.0f;
@@ -34,9 +34,11 @@ void Wave::Engine::Run()
 		float deltaTime = currentTime - previousTime;
 		previousTime = currentTime;
 
-		m_WindowSubsystem->Update(deltaTime);
+		state = m_WindowSubsystem->Update(deltaTime);
+		if (state != Result::Running) break;
 
-		appState = m_App->Update(deltaTime);
+		state = m_App->Update(deltaTime);
+		if (state != Result::Running) break;
 	}
 }
 

@@ -25,11 +25,8 @@ namespace Wave
 		GLuint vert_id = CompileShader(GL_VERTEX_SHADER, vert_shader);
 		GLuint frag_id = CompileShader(GL_FRAGMENT_SHADER, frag_shader);
 
-		if (!vert_id || !frag_id)
-		{
-			return false;
-		}
-
+		if (!vert_id || !frag_id) return false;
+		
 		LinkShader(vert_id, frag_id);
 
 		return true;

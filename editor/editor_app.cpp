@@ -5,6 +5,8 @@ namespace Editor
 {
 	void EditorApp::Init()
 	{
+		glEnable(GL_DEPTH_TEST);
+
 		auto& tm = Wave::TextureManager::GetInstance();
 
 		std::string texDir = Wave::Asset::GetDirectory() + "/textures/";
@@ -21,7 +23,7 @@ namespace Editor
 		m_Shader.End();
 
 		auto modelDir = Wave::Asset::GetDirectory() + "/models";
-		m_Model.Load(modelDir + "/backpack/backpack.obj");
+		//m_Model.Load(modelDir + "/backpack/backpack.obj");
 		m_Vb.Create(Wave::Cube::GetVertices());
 
 		m_Camera = std::make_unique<Wave::Camera>(60, 800, 600, 0.1f, 1000.f);
@@ -50,6 +52,11 @@ namespace Editor
 		w->Begin();
 		Render(deltaTime);
 		w->End();
+
+		/*auto w2 = ws->Get(1);
+		w2->Begin();
+		Render(deltaTime);
+		w2->End();*/
 
 		return Wave::Result::Running;
 	}
@@ -86,10 +93,10 @@ namespace Editor
 		m_Shader.SetFloat("u_Material.shininess", 32.0f);
 		
 		// Directional light
-		m_Shader.SetVec3("u_DirLight.direction", -0.2f, -1.0f, -0.3f);
+		/*m_Shader.SetVec3("u_DirLight.direction", -0.2f, -1.0f, -0.3f);
 		m_Shader.SetVec3("u_DirLight.ambient", 0.05f, 0.05f, 0.05f);
 		m_Shader.SetVec3("u_DirLight.diffuse", 0.4f, 0.4f, 0.4f);
-		m_Shader.SetVec3("u_DirLight.specular", 0.5f, 0.5f, 0.5f);
+		m_Shader.SetVec3("u_DirLight.specular", 0.5f, 0.5f, 0.5f);*/
 
 		// Point lights
 		for (GLuint i = 0; i < 4; i++)
@@ -121,7 +128,7 @@ namespace Editor
 		m_Shader.SetMat4("u_View", m_Camera->GetViewMatrix());
 		m_Shader.SetVec3("u_ViewPosition", m_Camera->GetPos());
 
-		m_Model.Draw(m_Shader);
+		//m_Model.Draw(m_Shader);
 
 		// Render boxes
 		auto& tm = Wave::TextureManager::GetInstance();
@@ -144,6 +151,7 @@ namespace Editor
 
 			m_Vb.Bind();
 			m_Vb.Draw();
+			m_Vb.Unbind();
 		}
 		m_Shader.End();
 	}
